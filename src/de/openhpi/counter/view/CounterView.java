@@ -2,7 +2,6 @@ package de.openhpi.counter.view;
 
 import de.openhpi.counter.common.Observable;
 import de.openhpi.counter.common.Observer;
-import de.openhpi.counter.common.ViewObserver;
 
 import processing.core.PApplet;
 import java.util.List;
@@ -21,24 +20,29 @@ public class CounterView extends PApplet implements Observable{
 	public static CounterView getInstance(){
 		return firstInstance;
 	}
+
+	// PApplet
 	@Override
 	public void settings() {
 		size(200, 200);
 	}
 
+	// PApplet
 	@Override
 	public void setup() {  // setup() runs once
 		super.frameRate(30);
-		this.update(0);
+		this.notifyAllObservers("View.SetUpReady");
 	}
 
+	// PApplet
 	@Override
-	public void draw() {
-	}  // draw() loops forever, until stopped
-	
+	public void draw() { // draw() loops forever, until stopped
+	}
+
+	// PApplet
 	@Override
 	public void mouseClicked() {
-		this.notifyAllObservers();
+		this.notifyAllObservers("View.MouseClicked");
 	}
 
 	public void update(int xPos) {
@@ -47,16 +51,16 @@ public class CounterView extends PApplet implements Observable{
 		super.rect(xPos, 10, 10, 10);
 		super.redraw();
 	}
-
+	
+	// Observable
 	@Override
 	public void registerObserver(Observer observer) {
 		observers.add(observer);	
 	}
-	
+	// Observable
 	@Override
-	public void notifyAllObservers() {
-		for (Observer observer : this.observers) {
-			((ViewObserver)observer).updateFromView();;
-		}
+	public void notifyAllObservers(String message) {
+		for (Observer observer : this.observers)
+			observer.update(message);
 	}
 }
