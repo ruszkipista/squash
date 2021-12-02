@@ -22,6 +22,13 @@ public class CounterModel implements Observable {
 		this.count++;
 		notifyAllObservers("Model.CounterIncremented");
 	}
+
+	public void decrement() {
+		if (this.count>0){
+			this.count--;
+			notifyAllObservers("Model.CounterDecremented");
+		}
+	}
 	
 	// Observable
 	@Override

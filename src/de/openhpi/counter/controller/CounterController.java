@@ -31,6 +31,7 @@ public class CounterController implements Observer{
 				this.counterModel.increment();
 				break;
 			case "Model.CounterIncremented":
+			case "Model.CounterDecremented":
 				this.counterView.update(this.counterModel.getCount());
 				break;
 		}
