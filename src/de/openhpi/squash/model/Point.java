@@ -1,19 +1,19 @@
 package de.openhpi.squash.model;
 
 public class Point {
-    public double x;
-    public double y;
+    public float x;
+    public float y;
 
-    public Point(double x, double y) {
+    public Point(float x, float y) {
         set(x, y);
     }
 
-    public void set(double x, double y){
+    public void set(float x, float y){
         this.x = x;
         this.y = y;
     }
 
-    public void move(Point speed, double time){
+    public void move(Point speed, float time){
         this.x += speed.x * time;
         this.y += speed.y * time;
     }

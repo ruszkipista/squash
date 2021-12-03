@@ -6,18 +6,18 @@ public abstract class Movable {
     Point positionMidPoint = new Point(0,0);
     Point distancePerSecond = new Point(0,0);
 
-    public void move(double timeInSecond){
+    public void move(float timeInSecond){
         this.positionMidPoint.move(distancePerSecond, timeInSecond);
     }
 
     public Point getMidPoint(){
         return this.positionMidPoint;
     }
-    public void setPositionMidpoint(double x, double y){
+    public void setPositionMidpoint(float x, float y){
         this.positionMidPoint.set(x,y);
     }
 
-    public void setDistancePerSecond(double x, double y){
+    public void setDistancePerSecond(float x, float y){
         this.distancePerSecond.set(x,y);
     }
 

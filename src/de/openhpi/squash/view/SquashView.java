@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class SquashView extends PApplet implements Observable{
 	// store the first instance
 	private static SquashView firstInstance = null;
-	public int canvasUnit;
+	public float canvasUnit;
 	public float drawFrameRate;
 
 	private List<Observer> observers = new ArrayList<Observer>();
@@ -20,7 +20,7 @@ public class SquashView extends PApplet implements Observable{
 	public SquashView(){
 		if (firstInstance == null){
 		    firstInstance = this;
-			this.canvasUnit = 10;
+			this.canvasUnit = 10.0f;
 			this.drawFrameRate = 30.0f;
 		}
 	}
@@ -56,7 +56,7 @@ public class SquashView extends PApplet implements Observable{
 		// this.notifyAllObservers("View.MouseClicked");
 	}
 
-	public void update(int xPos, int yPos) {
+	public void update(float xPos, float yPos) {
 		super.background(204);
 		super.fill(0);
 		super.rect(xPos, yPos, this.canvasUnit, this.canvasUnit);

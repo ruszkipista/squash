@@ -1,20 +1,12 @@
 package de.openhpi.squash.model;
 
 public class Space {
-    private double width;
-	private double height;
+    protected float width;
+	protected float height;
 
-    public Space(double width, double height){
+    public Space(float width, float height){
         this.width = width;
         this.height = height;
-    }
-
-    public double getWidth() {
-        return this.width;
-    }
-
-    public double getHeight() {
-        return this.height;
     }
 
 }

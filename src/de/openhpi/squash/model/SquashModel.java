@@ -9,23 +9,23 @@ import java.util.ArrayList;
 
 public class SquashModel implements Observable {
 	private List<Observer> observers = new ArrayList<Observer>();
-	private double frameTimeInSec = 0.0d;
+	private float frameTimeInSec = 0.0f;
 	private Space space;
 	private Ball ball;
-	private double unit = 1.0d;
+	private float unit = 1.0f;
 
-	public SquashModel(double width, double height, double frameRate) {
-		this.frameTimeInSec = 1.0d / frameRate;
+	public SquashModel(float width, float height, float frameRate) {
+		this.frameTimeInSec = 1.0f / frameRate;
 		this.space = new Space(width,height);
 		this.ball = new Ball(unit,unit);
 		this.ball.setPositionMidpoint(0+unit/2, 0+unit/2);
-		this.ball.setDistancePerSecond(unit, unit/2);
+		this.ball.setDistancePerSecond(unit*4, unit);
 	}
 
-	public double getBallXpos() {
+	public float getBallXpos() {
 		return ball.getMidPoint().x - unit/2;
 	}
-	public double getBallYpos() {
+	public float getBallYpos() {
 		return ball.getMidPoint().y - unit/2;
 	}
 
@@ -40,7 +40,7 @@ public class SquashModel implements Observable {
 	}
 
 	public void decrement() {
-		if (this.ball.getMidPoint().x > 0){
+		if (this.ball.getMidPoint().x > 0.0){
 			this.ball.move(-1);
 			notifyAllObservers("Model.Changed");
 		}
