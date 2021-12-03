@@ -12,14 +12,15 @@ public class SquashModel implements Observable {
 	private float frameTimeInSec = 0.0f;
 	private Space space;
 	private Ball ball;
-	private float unit = 1.0f;
+	private float unit;
 
-	public SquashModel(float width, float height, float frameRate) {
+	public SquashModel(float unit,float width, float height, float frameRate) {
+		this.unit = unit;
 		this.frameTimeInSec = 1.0f / frameRate;
 		this.space = new Space(width,height);
 		this.ball = new Ball(unit,unit);
 		this.ball.setPositionMidpoint(0+unit/2, 0+unit/2);
-		this.ball.setDistancePerSecond(unit*4, unit);
+		this.ball.setDistancePerSecond(unit*4, unit*2);
 	}
 
 	public float getBallXpos() {

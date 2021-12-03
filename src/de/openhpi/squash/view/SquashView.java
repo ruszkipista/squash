@@ -57,8 +57,9 @@ public class SquashView extends PApplet implements Observable{
 	}
 
 	public void update(float xPos, float yPos) {
+		int color = color(0);
 		super.background(204);
-		super.fill(0);
+		super.fill(color);
 		super.rect(xPos, yPos, this.canvasUnit, this.canvasUnit);
 		super.redraw();
 	}

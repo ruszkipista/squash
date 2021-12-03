@@ -10,10 +10,10 @@ public class SquashController implements Observer{
 	private SquashModel squashModel;
 	
 	public static void setup(SquashView squashView) {
-		SquashModel sm = new SquashModel(
-			squashView.width / squashView.canvasUnit,
-			squashView.height / squashView.canvasUnit,
-			squashView.drawFrameRate);
+		SquashModel sm = new SquashModel(squashView.canvasUnit,
+										squashView.width, 
+										squashView.height, 
+										squashView.drawFrameRate);
 		instance = new SquashController(squashView, sm);
 		instance.update("Controller.SetUpReady");
 	}
@@ -41,12 +41,9 @@ public class SquashController implements Observer{
 			case "Controller.SetUpReady":
 			case "Model.Changed":
 				this.squashView.update(
-					translateUnitToPixel(this.squashModel.getBallXpos()),
-					translateUnitToPixel(this.squashModel.getBallYpos()));
+					this.squashModel.getBallXpos(),
+					this.squashModel.getBallYpos());
 				break;
 		}
-	}
-	private float translateUnitToPixel(float unit){
-		return unit * squashView.canvasUnit;
 	}
 }
