@@ -2,16 +2,18 @@ package de.openhpi.squash.view;
 
 import processing.core.PApplet;
 import java.util.List;
+import java.util.ArrayList;
 
 import de.openhpi.squash.common.Observable;
 import de.openhpi.squash.common.Observer;
+import de.openhpi.squash.controller.BallController;
 import de.openhpi.squash.controller.SquashController;
-
-import java.util.ArrayList;
 
 public class SquashView extends PApplet implements Observable{
 	public float canvasUnit;
 	public float drawFrameRate;
+	public int darkColor = 0;
+	public int lightColor = 255;
 
 	private List<Observer> observers = new ArrayList<Observer>();
 
@@ -47,11 +49,10 @@ public class SquashView extends PApplet implements Observable{
 		this.notifyAllObservers("View.MouseClicked");
 	}
 
-	public void update(Drawable shape) {
-		int color = color(0);
+	public void update(List<Drawable> shapes) {
 		super.background(204);
-		super.fill(color);
-		shape.draw(this);
+		for (Drawable shape : shapes)
+			shape.draw(this);
 		super.redraw();
 	}
 	

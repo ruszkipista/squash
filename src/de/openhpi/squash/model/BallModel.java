@@ -1,6 +1,14 @@
 package de.openhpi.squash.model;
 
-public class Rectangle extends Movable {
+import java.util.List;
+import java.util.ArrayList;
+
+import de.openhpi.squash.common.Observable;
+import de.openhpi.squash.common.Observer;
+
+public class BallModel extends Movable implements Observable {
+    private List<Observer> observers = new ArrayList<Observer>();
+
     private float width;
     private float height;
     private Point topLeft     = new Point(0,0);
@@ -12,7 +20,7 @@ public class Rectangle extends Movable {
     private LineSegment left = new LineSegment(topLeft, bottomLeft);
     private LineSegment right = new LineSegment(topRight, bottomRight);
 
-    public Rectangle(float width, float height){
+    public BallModel(float width, float height){
         this.width = width;
         this.height = height;
     }
@@ -39,4 +47,20 @@ public class Rectangle extends Movable {
             || left.isIntersecting(lineSegment)
             || right.isIntersecting(lineSegment);
     }
+
+    public void calculateNextFrame(float lapsedTimeInSec){
+        this.move(lapsedTimeInSec);
+	}
+    
+    // Observable
+	@Override
+	public void registerObserver(Observer observer) {
+		this.observers.add(observer);	
+	}
+	// Observable
+	@Override
+	public void notifyAllObservers(String message) {
+		for (Observer observer : this.observers)
+			observer.update(message);
+	}
 }

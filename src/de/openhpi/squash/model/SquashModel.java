@@ -1,35 +1,21 @@
 package de.openhpi.squash.model;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import de.openhpi.squash.common.Observable;
 import de.openhpi.squash.common.Observer;
 
-import java.util.ArrayList;
 
 public class SquashModel implements Observable {
 	private List<Observer> observers = new ArrayList<Observer>();
-	private float frameTimeInSec = 0.0f;
 	private Space space;
-	private Rectangle ball;
 
-	public SquashModel(float baseUnit,float width, float height, float frameRate) {
-		this.frameTimeInSec = 1.0f / frameRate;
+	public SquashModel(float baseUnit,float width, float height) {
 		this.space = new Space(width,height);
-
-		this.ball = new Rectangle(baseUnit,baseUnit);
-		this.ball.setPosition(0,0);
-		this.ball.setDistancePerSecond(baseUnit*4, baseUnit*2);
 	}
 
-	public float getBallXpos() { return ball.getPosition().x; }
-	public float getBallYpos() { return ball.getPosition().y; }
-	public float getBallWidth(){ return ball.getWidth(); }
-	public float getBallHeight(){ return ball.getHeight(); }
-
-	public void calculateNextFrame(){
-		ball.move(this.frameTimeInSec);
-		notifyAllObservers("Model.Changed");
+	public void calculateNextFrame(float lapsedTimeInSec){
 	}
 
 	// Observable
