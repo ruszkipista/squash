@@ -3,18 +3,18 @@ package de.openhpi.squash.model;
 public abstract class Movable {
     boolean drawable = false;
 
-    Point positionMidPoint = new Point(0,0);
-    Point distancePerSecond = new Point(0,0);
+    Point position = new Point(0,0);
+    Speed distancePerSecond = new Speed(0,0);
 
-    public void move(float timeInSecond){
-        this.positionMidPoint.move(distancePerSecond, timeInSecond);
+    public void move(float lapsedTimeInSecond){
+        this.position.move(distancePerSecond, lapsedTimeInSecond);
     }
 
-    public Point getMidPoint(){
-        return this.positionMidPoint;
+    public Point getPosition(){
+        return this.position;
     }
-    public void setPositionMidpoint(float x, float y){
-        this.positionMidPoint.set(x,y);
+    public void setPosition(float x, float y){
+        this.position.set(x,y);
     }
 
     public void setDistancePerSecond(float x, float y){
@@ -27,6 +27,10 @@ public abstract class Movable {
 
     public void setDrawableOff(){
         this.drawable = false;
+    }
+
+    public void changeSpeed(float x, float y){
+        distancePerSecond.change(x,y);
     }
 
 }

@@ -10,22 +10,14 @@ import de.openhpi.squash.controller.SquashController;
 import java.util.ArrayList;
 
 public class SquashView extends PApplet implements Observable{
-	// store the first instance
-	private static SquashView firstInstance = null;
 	public float canvasUnit;
 	public float drawFrameRate;
 
 	private List<Observer> observers = new ArrayList<Observer>();
 
 	public SquashView(){
-		if (firstInstance == null){
-		    firstInstance = this;
-			this.canvasUnit = 10.0f;
-			this.drawFrameRate = 30.0f;
-		}
-	}
-	public static SquashView getInstance(){
-		return firstInstance;
+		this.canvasUnit = 10.0f;
+		this.drawFrameRate = 30.0f;
 	}
 
 	// PApplet
@@ -52,15 +44,14 @@ public class SquashView extends PApplet implements Observable{
 	// PApplet
 	@Override
 	public void mouseClicked() {
-		this.notifyAllObservers("View.NextFrame");
-		// this.notifyAllObservers("View.MouseClicked");
+		this.notifyAllObservers("View.MouseClicked");
 	}
 
-	public void update(float xPos, float yPos) {
+	public void update(Drawable shape) {
 		int color = color(0);
 		super.background(204);
 		super.fill(color);
-		super.rect(xPos, yPos, this.canvasUnit, this.canvasUnit);
+		shape.draw(this);
 		super.redraw();
 	}
 	

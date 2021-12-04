@@ -13,7 +13,12 @@ public class Point {
         this.y = y;
     }
 
-    public void move(Point speed, float time){
+    public void copyPositionAndMove(Point other, float deltaX, float deltaY){
+        this.x = other.x + deltaX;
+        this.y = other.y + deltaY;
+    }
+
+    public void move(Speed speed, float time){
         this.x += speed.x * time;
         this.y += speed.y * time;
     }
