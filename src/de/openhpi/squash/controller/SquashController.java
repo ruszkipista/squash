@@ -3,55 +3,60 @@ package de.openhpi.squash.controller;
 import java.util.List;
 import java.util.ArrayList;
 
+import de.openhpi.squash.common.Display;
 import de.openhpi.squash.common.Observer;
 import de.openhpi.squash.model.BallModel;
-import de.openhpi.squash.model.SquashModel;
+import de.openhpi.squash.model.BoardModel;
 import de.openhpi.squash.view.BallView;
 import de.openhpi.squash.view.Drawable;
-import de.openhpi.squash.view.SquashView;
+import de.openhpi.squash.view.BoardView;
 
 public class SquashController implements Observer{
-	static SquashController instance;
-    private SquashView squashView;
-	private SquashModel squashModel;
-	private BallController ballController;
+	private Display display;
+	BoardView boardView;
+	BoardModel boardModel;
+	BallView ballView;
+	BallModel ballModel;
 	float frameTimeInSec = 0.0f;
 
 	private List<Drawable> shapes = new ArrayList<Drawable>();
 	
-	public static void setup(SquashView squashView) {
-		SquashModel sm = new SquashModel(squashView.canvasUnit,
-										squashView.width, 
-										squashView.height);
-		instance = new SquashController(squashView, sm);
-		instance.update("Controller.SetUpReady");
+	public static void setup(Display display) {
+		new SquashController(display);
 	}
 
 	// store View and Model references
-	private SquashController(SquashView squashView, SquashModel squashModel){
-        this.frameTimeInSec = 1.0f / squashView.drawFrameRate;
+	private SquashController(Display display){
+		this.display = display;
+		this.display.registerObserver(this);
 
-		this.squashView = squashView;
-		this.squashView.registerObserver(this);
-		this.squashModel = squashModel;
-		this.squashModel.registerObserver(this);
+        this.frameTimeInSec = 1.0f / display.drawFrameRate;
 
-		BallView ballView = new BallView();
-		BallModel ballModel = new BallModel(squashView.canvasUnit,
-											squashView.canvasUnit);
-		this.ballController = new BallController(ballView, ballModel,this.frameTimeInSec);
+		this.boardView = new BoardView();
+		this.shapes.add(this.boardView);
+		this.boardModel = new BoardModel(display.width, display.height);
+		this.ballView = new BallView();
+		this.shapes.add(this.ballView);
+		this.ballModel = new BallModel(display.canvasUnit);
+		this.ballModel.setDistancePerSecond(display.canvasUnit*4, display.canvasUnit*2);
 	}
 
 	// process messages from View and Model
 	@Override
 	public void update(String message){
 		switch (message){
-			case "View.NextFrame":
-				this.squashModel.calculateNextFrame(this.frameTimeInSec);
+			case "Display.NextFrame":
+				this.boardModel.calculateNextFrame(this.frameTimeInSec);
+				this.boardView.set();
+				this.ballModel.calculateNextFrame(this.frameTimeInSec);
+				this.ballView.set(this.ballModel.side, 
+				                  this.ballModel.getPosition().x,
+								  this.ballModel.getPosition().y);
+				this.display.update(this.shapes);
 				break;
-			case "Controller.SetUpReady":
+			case "Display.SetUpReady":
 			case "Model.Changed":
-				this.squashView.update(this.shapes);
+				this.display.update(this.shapes);
 				break;
 		}
 	}
