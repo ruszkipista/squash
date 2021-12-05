@@ -49,6 +49,7 @@ public class SquashController implements IObserver {
 		
 		this.ballModel = new BallModel(display.canvasUnit);
 		this.ballModel.setDistancePerSecond(display.canvasUnit*4, display.canvasUnit*2);
+		this.ballModel.setPosition(0, 0);
 	}
 
 	// process messages from Display
@@ -87,26 +88,26 @@ public class SquashController implements IObserver {
 		if (movSpeed.x>0 && (movingObject.top.isIntersectingWith(fixedObject.right)
 						|| movingObject.bottom.isIntersectingWith(fixedObject.right))){
 			movingObject.changeDistancePerSecond(-1, 1);
-			movingObject.setPosition(movNewPos.x-(movingObject.right.pointA.x-fixedObject.right.pointA.x),
+			movingObject.setNewPosition(movNewPos.x-(movingObject.right.pointA.x-fixedObject.right.pointA.x),
 									movNewPos.y);
 		}
 		else if (movSpeed.x<0 && (movingObject.top.isIntersectingWith(fixedObject.left)
 		 					|| movingObject.bottom.isIntersectingWith(fixedObject.left))) {
 			movingObject.changeDistancePerSecond(-1, 1);
-			movingObject.setPosition(fixedObject.left.pointA.x+(fixedObject.left.pointA.x-movNewPos.x),
+			movingObject.setNewPosition(fixedObject.left.pointA.x+(fixedObject.left.pointA.x-movNewPos.x),
 									movNewPos.y);
 		}
 
 		if (movSpeed.y>0 && (movingObject.left.isIntersectingWith(fixedObject.bottom)
 						|| movingObject.right.isIntersectingWith(fixedObject.bottom))){
 			movingObject.changeDistancePerSecond(1, -1);
-			movingObject.setPosition(movNewPos.x,
+			movingObject.setNewPosition(movNewPos.x,
 									movNewPos.y-(movingObject.bottom.pointA.y-fixedObject.bottom.pointA.y));
 		}
 		else if (movSpeed.y<0 && (movingObject.left.isIntersectingWith(fixedObject.top)
 							|| movingObject.right.isIntersectingWith(fixedObject.top))){
 			movingObject.changeDistancePerSecond(1, -1);
-			movingObject.setPosition(movNewPos.x,
+			movingObject.setNewPosition(movNewPos.x,
 								fixedObject.top.pointA.y+(fixedObject.top.pointA.y-movNewPos.y));
 		}
 	}

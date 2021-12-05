@@ -23,6 +23,9 @@ public abstract class IMovableRectangle extends IPositionableRectangle {
     public Point getNewPosition(){
         return this.newPosition;
     }
+    public void setNewPosition(float x, float y){
+        this.newPosition.set(x,y);
+    }
 
     public Speed getDistancePerSecond(){
         return this.distancePerSecond;
