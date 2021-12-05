@@ -25,18 +25,21 @@ public class SquashController implements Observer{
 		new SquashController(display);
 	}
 
-	// store View and Model references
+	// setup Views and Models
 	private SquashController(Display display){
+        this.frameTimeInSec = 1.0f / display.drawFrameRate;
+
 		this.display = display;
 		this.display.registerObserver(this);
 
-        this.frameTimeInSec = 1.0f / display.drawFrameRate;
-
 		this.boardView = new BoardView();
 		this.shapes.add(this.boardView);
+
 		this.boardModel = new BoardModel(display.width, display.height);
+
 		this.ballView = new BallView();
 		this.shapes.add(this.ballView);
+		
 		this.ballModel = new BallModel(display.canvasUnit);
 		this.ballModel.setDistancePerSecond(display.canvasUnit*4, display.canvasUnit*2);
 	}
@@ -45,19 +48,29 @@ public class SquashController implements Observer{
 	@Override
 	public void update(String message){
 		switch (message){
-			case "Display.NextFrame":
-				this.boardModel.calculateNextFrame(this.frameTimeInSec);
-				this.boardView.set();
-				this.ballModel.calculateNextFrame(this.frameTimeInSec);
-				this.ballView.set(this.ballModel.side, 
-				                  this.ballModel.getPosition().x,
-								  this.ballModel.getPosition().y);
+			case "Display.SetUpReady":
+				this.setFrameInViews();
 				this.display.update(this.shapes);
 				break;
-			case "Display.SetUpReady":
-			case "Model.Changed":
+
+			case "Display.NextFrame":
+			case "Display.MouseClicked":
+				this.calculateNextFrameInModels();
+				this.setFrameInViews();
 				this.display.update(this.shapes);
 				break;
 		}
+	}
+
+	private void calculateNextFrameInModels(){
+		this.boardModel.calculateNextFrame(this.frameTimeInSec);
+		this.ballModel.calculateNextFrame(this.frameTimeInSec);
+	}
+
+	private void setFrameInViews(){
+		this.boardView.set();
+		this.ballView.set(this.ballModel.side, 
+						  this.ballModel.getPosition().x,
+						  this.ballModel.getPosition().y);
 	}
 }

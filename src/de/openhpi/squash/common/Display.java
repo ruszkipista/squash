@@ -34,7 +34,7 @@ public class Display extends PApplet implements Observable{
 		this.drawFrameRate = 30.0f;
 		this.darkColor = 0;
 		this.lightColor = 255;	
-		this.backgroundColor = 204;	
+		this.backgroundColor = 204;
 	}
 
 	// PApplet

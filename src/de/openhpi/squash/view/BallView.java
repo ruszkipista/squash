@@ -8,9 +8,9 @@ public class BallView extends Drawable {
     private float side;
 
     public void set(float side, float xPos, float yPos){
-        this.side = side;
-        this.xPos = xPos;
-        this.yPos = yPos;
+        this.side = Math.round(side);
+        this.xPos = Math.round(xPos);
+        this.yPos = Math.round(yPos);
     }
 
     public void draw(Display display){

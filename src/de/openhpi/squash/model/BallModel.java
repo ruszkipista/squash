@@ -1,6 +1,6 @@
 package de.openhpi.squash.model;
 
-public class BallModel extends Movable {
+public class BallModel extends Movable implements Frameable{
     public float side;
 
     private Point topLeft     = new Point(0,0);
@@ -37,6 +37,7 @@ public class BallModel extends Movable {
             || right.isIntersecting(lineSegment);
     }
 
+    // Frameable
     public void calculateNextFrame(float lapsedTimeInSec){
         this.move(lapsedTimeInSec);
 	}
