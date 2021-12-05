@@ -23,8 +23,8 @@ public class SquashController implements IObserver {
 	BallView ballView;
 	BallModel ballModel;
 	float frameTimeInSec = 0.0f;
-	private Speed speed;    // reused by checkCollison()
-	private Point position; // reused by checkCollison()
+	private Speed movSpeed;    // reused by checkCollison()
+	private Point movNewPos; // reused by checkCollison()
 
 	private List<IDrawable> shapes = new ArrayList<IDrawable>();
 	
@@ -82,32 +82,32 @@ public class SquashController implements IObserver {
 
 	private void checkCollisonMovingInsideFixed(IMovableRectangle movingObject, 
 												IPositionableRectangle fixedObject) {
-		speed = movingObject.getDistancePerSecond();
-		position = movingObject.getPosition();
-		if (speed.x>0 && (movingObject.top.isIntersectingWith(fixedObject.right)
+		movSpeed = movingObject.getDistancePerSecond();
+		movNewPos = movingObject.getNewPosition();
+		if (movSpeed.x>0 && (movingObject.top.isIntersectingWith(fixedObject.right)
 						|| movingObject.bottom.isIntersectingWith(fixedObject.right))){
 			movingObject.changeDistancePerSecond(-1, 1);
-			movingObject.setPosition(position.x-(movingObject.right.pointA.x-fixedObject.right.pointA.x),
-									position.y);
+			movingObject.setPosition(movNewPos.x-(movingObject.right.pointA.x-fixedObject.right.pointA.x),
+									movNewPos.y);
 		}
-		else if (speed.x<0 && (movingObject.top.isIntersectingWith(fixedObject.left)
+		else if (movSpeed.x<0 && (movingObject.top.isIntersectingWith(fixedObject.left)
 		 					|| movingObject.bottom.isIntersectingWith(fixedObject.left))) {
 			movingObject.changeDistancePerSecond(-1, 1);
-			movingObject.setPosition(fixedObject.left.pointA.x+(fixedObject.left.pointA.x-position.x),
-									position.y);
+			movingObject.setPosition(fixedObject.left.pointA.x+(fixedObject.left.pointA.x-movNewPos.x),
+									movNewPos.y);
 		}
 
-		if (speed.y>0 && (movingObject.left.isIntersectingWith(fixedObject.bottom)
+		if (movSpeed.y>0 && (movingObject.left.isIntersectingWith(fixedObject.bottom)
 						|| movingObject.right.isIntersectingWith(fixedObject.bottom))){
 			movingObject.changeDistancePerSecond(1, -1);
-			movingObject.setPosition(position.x,
-									position.y-(movingObject.bottom.pointA.y-fixedObject.bottom.pointA.y));
+			movingObject.setPosition(movNewPos.x,
+									movNewPos.y-(movingObject.bottom.pointA.y-fixedObject.bottom.pointA.y));
 		}
-		else if (speed.y<0 && (movingObject.left.isIntersectingWith(fixedObject.top)
+		else if (movSpeed.y<0 && (movingObject.left.isIntersectingWith(fixedObject.top)
 							|| movingObject.right.isIntersectingWith(fixedObject.top))){
 			movingObject.changeDistancePerSecond(1, -1);
-			movingObject.setPosition(position.x,
-								fixedObject.top.pointA.y+(fixedObject.top.pointA.y-position.y));
+			movingObject.setPosition(movNewPos.x,
+								fixedObject.top.pointA.y+(fixedObject.top.pointA.y-movNewPos.y));
 		}
 	}
 
