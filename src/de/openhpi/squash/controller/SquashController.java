@@ -11,7 +11,8 @@ import de.openhpi.squash.view.BallView;
 import de.openhpi.squash.view.Drawable;
 import de.openhpi.squash.view.BoardView;
 
-public class SquashController implements Observer{
+public class SquashController implements Observer {
+	private boolean modelChanged;
 	private Display display;
 	BoardView boardView;
 	BoardModel boardModel;
@@ -49,28 +50,35 @@ public class SquashController implements Observer{
 	public void update(String message){
 		switch (message){
 			case "Display.SetUpReady":
-				this.setFrameInViews();
+				this.copyModelAttributesToViews();
 				this.display.update(this.shapes);
 				break;
 
 			case "Display.NextFrame":
 			case "Display.MouseClicked":
 				this.calculateNextFrameInModels();
-				this.setFrameInViews();
-				this.display.update(this.shapes);
+				if (this.finalizeNextFrameInModels()){
+					this.copyModelAttributesToViews();
+					this.display.update(this.shapes);
+				}
 				break;
 		}
 	}
 
 	private void calculateNextFrameInModels(){
-		this.boardModel.calculateNextFrame(this.frameTimeInSec);
 		this.ballModel.calculateNextFrame(this.frameTimeInSec);
 	}
 
-	private void setFrameInViews(){
-		this.boardView.set();
+	private boolean finalizeNextFrameInModels(){
+		this.modelChanged = false;
+		this.modelChanged = this.modelChanged || 
+							this.ballModel.finalizeNextFrame();
+		return modelChanged;
+	}
+
+	private void copyModelAttributesToViews(){
 		this.ballView.set(this.ballModel.side, 
-						  this.ballModel.getPosition().x,
-						  this.ballModel.getPosition().y);
+						this.ballModel.getPosition().x,
+						this.ballModel.getPosition().y);
 	}
 }

@@ -1,7 +1,7 @@
 package de.openhpi.squash.model;
 
 public abstract class PositionableRectangle extends Rectangle {
-    protected Point position = new Point(0,0);
+    protected Point oldPposition = new Point(0,0);
 
     private Point topLeft     = new Point(0,0);
     private Point topRight    = new Point(0,0);
@@ -14,21 +14,21 @@ public abstract class PositionableRectangle extends Rectangle {
 
     public PositionableRectangle(float width, float height){
         super(width, height);
-        this.setCorners();
+        this.setCorners(this.oldPposition);
     }
     
-    protected void setCorners(){
-        topLeft.copyPositionAndMove(this.position, 0, 0);
-        topRight.copyPositionAndMove(this.position, +super.width, 0);
-        bottomLeft.copyPositionAndMove(this.position, 0, +super.height);
-        bottomRight.copyPositionAndMove(this.position, +super.width, +super.height);
+    protected void setCorners(Point newPosition){
+        topLeft.copyAndMove(newPosition, 0, 0);
+        topRight.copyAndMove(newPosition, +super.width, 0);
+        bottomLeft.copyAndMove(newPosition, 0, +super.height);
+        bottomRight.copyAndMove(newPosition, +super.width, +super.height);
     }
 
     public Point getPosition(){
-        return this.position;
+        return this.oldPposition;
     }
     public void setPosition(float x, float y){
-        this.position.set(x,y);
+        this.oldPposition.set(x,y);
     }
 
     public boolean isIntersecting(LineSegment lineSegment){

@@ -11,6 +11,13 @@ public class BallModel extends MovableRectangle implements Frameable{
     // Frameable
     @Override
     public void calculateNextFrame(float lapsedTimeInSec){
-        this.move(lapsedTimeInSec);
+        super.prepareMove(lapsedTimeInSec);
 	}
+
+    // Frameable
+	@Override
+    public boolean finalizeNextFrame(){
+        return super.finalizeMove();
+	}
+
 }
