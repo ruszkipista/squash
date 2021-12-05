@@ -1,6 +1,6 @@
 package de.openhpi.squash.model;
 
-public class BallModel extends MovableRectangle{
+public class BallModel extends MovableRectangle implements Frameable{
     public float side;
 
     public BallModel(float side){
@@ -8,4 +8,9 @@ public class BallModel extends MovableRectangle{
         this.side = side;
     }
 
+    // Frameable
+    @Override
+    public void calculateNextFrame(float lapsedTimeInSec){
+        this.move(lapsedTimeInSec);
+	}
 }

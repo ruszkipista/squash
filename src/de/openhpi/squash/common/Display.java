@@ -55,7 +55,7 @@ public class Display extends PApplet implements Observable{
 
 	// PApplet
 	@Override
-	public void draw() { // draw() loops forever, until stopped
+	public void draw() { // draw() calles 'drawFrameRate' times per second
 		this.notifyAllObservers("Display.NextFrame");
 	}
 
