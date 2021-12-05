@@ -1,5 +1,5 @@
 package de.openhpi.squash.common;
 
-public interface Observer {
+public interface IObserver {
     public void update(String message);
 }

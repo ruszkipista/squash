@@ -2,7 +2,7 @@ package de.openhpi.squash.view;
 
 import de.openhpi.squash.common.Display;
 
-public class BoardView extends Drawable{
+public class BoardView extends IDrawable{
 
 	public void set(){
 

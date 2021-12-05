@@ -2,7 +2,7 @@ package de.openhpi.squash.view;
 
 import de.openhpi.squash.common.Display;
 
-public class BallView extends Drawable {
+public class BallView extends IDrawable {
     private float xPos;
     private float yPos;
     private float side;

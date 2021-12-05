@@ -1,6 +1,6 @@
 package de.openhpi.squash.model;
 
-public class BallModel extends MovableRectangle implements Frameable{
+public class BallModel extends IMovableRectangle implements IFrameable{
     public float side;
 
     public BallModel(float side){

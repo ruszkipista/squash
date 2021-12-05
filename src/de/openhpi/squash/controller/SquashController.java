@@ -4,14 +4,14 @@ import java.util.List;
 import java.util.ArrayList;
 
 import de.openhpi.squash.common.Display;
-import de.openhpi.squash.common.Observer;
+import de.openhpi.squash.common.IObserver;
 import de.openhpi.squash.model.BallModel;
 import de.openhpi.squash.model.BoardModel;
 import de.openhpi.squash.view.BallView;
-import de.openhpi.squash.view.Drawable;
+import de.openhpi.squash.view.IDrawable;
 import de.openhpi.squash.view.BoardView;
 
-public class SquashController implements Observer {
+public class SquashController implements IObserver {
 	private boolean modelChanged;
 	private Display display;
 	BoardView boardView;
@@ -20,7 +20,7 @@ public class SquashController implements Observer {
 	BallModel ballModel;
 	float frameTimeInSec = 0.0f;
 
-	private List<Drawable> shapes = new ArrayList<Drawable>();
+	private List<IDrawable> shapes = new ArrayList<IDrawable>();
 	
 	public static void setup(Display display) {
 		new SquashController(display);

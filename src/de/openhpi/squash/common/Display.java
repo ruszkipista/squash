@@ -4,11 +4,11 @@ import processing.core.PApplet;
 import java.util.List;
 import java.util.ArrayList;
 
-import de.openhpi.squash.view.Drawable;
+import de.openhpi.squash.view.IDrawable;
 
 import de.openhpi.squash.controller.SquashController;
 
-public class Display extends PApplet implements Observable{
+public class Display extends PApplet implements IObservable{
 	public int canvasWidth;
 	public int canvasHeight;
 	public float canvasUnit;
@@ -17,7 +17,7 @@ public class Display extends PApplet implements Observable{
 	public int darkColor;
 	public int lightColor;
 
-	private List<Observer> observers = new ArrayList<Observer>();
+	private List<IObserver> observers = new ArrayList<IObserver>();
 
 	public static void main(String[] args) {
         // this call instantiates the Display applet
@@ -65,21 +65,21 @@ public class Display extends PApplet implements Observable{
 		this.notifyAllObservers("Display.MouseClicked");
 	}
 
-	public void update(List<Drawable> shapes) {
-		for (Drawable shape : shapes)
+	public void update(List<IDrawable> shapes) {
+		for (IDrawable shape : shapes)
 			shape.draw(this);
 		super.redraw();
 	}
 
 	// Observable
 	@Override
-	public void registerObserver(Observer observer) {
+	public void registerObserver(IObserver observer) {
 		this.observers.add(observer);	
 	}
 	// Observable
 	@Override
 	public void notifyAllObservers(String message) {
-		for (Observer observer : this.observers)
+		for (IObserver observer : this.observers)
 			observer.update(message);
 	}
 }

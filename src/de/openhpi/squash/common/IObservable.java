@@ -1,6 +1,6 @@
 package de.openhpi.squash.common;
 
-public interface Observable {
-	void registerObserver(Observer observer);
+public interface IObservable {
+	void registerObserver(IObserver observer);
 	void notifyAllObservers(String message);
 }

@@ -1,6 +1,6 @@
 package de.openhpi.squash.model;
 
-public abstract class PositionableRectangle extends Rectangle {
+public abstract class IPositionableRectangle extends IRectangle {
     protected Point oldPposition = new Point(0,0);
 
     private Point topLeft     = new Point(0,0);
@@ -12,7 +12,7 @@ public abstract class PositionableRectangle extends Rectangle {
     private LineSegment left   = new LineSegment(topLeft,    bottomLeft);
     private LineSegment right  = new LineSegment(topRight,   bottomRight);
 
-    public PositionableRectangle(float width, float height){
+    public IPositionableRectangle(float width, float height){
         super(width, height);
         this.setCorners(this.oldPposition);
     }
