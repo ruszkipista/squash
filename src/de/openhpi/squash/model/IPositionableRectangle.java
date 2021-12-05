@@ -1,7 +1,7 @@
 package de.openhpi.squash.model;
 
 public abstract class IPositionableRectangle extends IRectangle {
-    protected Point oldPposition = new Point(0,0);
+    protected Point position = new Point(0,0);
 
     private Point topLeft     = new Point(0,0);
     private Point topRight    = new Point(0,0);
@@ -14,7 +14,7 @@ public abstract class IPositionableRectangle extends IRectangle {
 
     public IPositionableRectangle(float width, float height){
         super(width, height);
-        this.setCorners(this.oldPposition);
+        this.setCorners(this.position);
     }
     
     protected void setCorners(Point newPosition){
@@ -25,10 +25,10 @@ public abstract class IPositionableRectangle extends IRectangle {
     }
 
     public Point getPosition(){
-        return this.oldPposition;
+        return this.position;
     }
     public void setPosition(float x, float y){
-        this.oldPposition.set(x,y);
+        this.position.set(x,y);
     }
 
     public boolean isIntersecting(LineSegment lineSegment){

@@ -10,14 +10,18 @@ public abstract class IMovableRectangle extends IPositionableRectangle {
     }
     
     public void prepareMove(float lapsedTimeInSecond){
-        this.newPosition.copyAndMove(super.oldPposition, distancePerSecond, lapsedTimeInSecond);
+        this.newPosition.copyAndMove(super.position, distancePerSecond, lapsedTimeInSecond);
         super.setCorners(newPosition);
     }
 
     public boolean finalizeMove() {
-        this.modelChanged = super.oldPposition.equals(this.newPosition);
-        super.oldPposition.copy(this.newPosition);
+        this.modelChanged = super.position.equals(this.newPosition);
+        super.position.copy(this.newPosition);
         return this.modelChanged;
+    }
+
+    public Point getNewPosition(){
+        return this.newPosition;
     }
 
     public Speed getDistancePerSecond(){

@@ -28,8 +28,8 @@ public class Display extends PApplet implements IObservable{
 	}
 
 	public Display(){
-		this.canvasWidth = 40;
-		this.canvasHeight = 100;
+		this.canvasWidth = 120;
+		this.canvasHeight = 55;
 		this.canvasUnit = 10.0f;
 		this.drawFrameRate = 30.0f;
 		this.darkColor = 0;
