@@ -20,6 +20,10 @@ public abstract class IMovableRectangle extends IPositionableRectangle {
         return this.modelChanged;
     }
 
+    public Speed getDistancePerSecond(){
+        return this.distancePerSecond;
+    }
+
     public void setDistancePerSecond(float x, float y){
         this.distancePerSecond.set(x,y);
     }

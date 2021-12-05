@@ -7,10 +7,10 @@ public abstract class IPositionableRectangle extends IRectangle {
     private Point topRight    = new Point(0,0);
     private Point bottomLeft  = new Point(0,0);
     private Point bottomRight = new Point(0,0);
-    private LineSegment top    = new LineSegment(topLeft,    topRight);
-    private LineSegment bottom = new LineSegment(bottomLeft, bottomRight);
-    private LineSegment left   = new LineSegment(topLeft,    bottomLeft);
-    private LineSegment right  = new LineSegment(topRight,   bottomRight);
+    public LineSegment top    = new LineSegment(topLeft,    topRight);
+    public LineSegment bottom = new LineSegment(bottomLeft, bottomRight);
+    public LineSegment left   = new LineSegment(topLeft,    bottomLeft);
+    public LineSegment right  = new LineSegment(topRight,   bottomRight);
 
     public IPositionableRectangle(float width, float height){
         super(width, height);
@@ -32,10 +32,10 @@ public abstract class IPositionableRectangle extends IRectangle {
     }
 
     public boolean isIntersecting(LineSegment lineSegment){
-        return top.isIntersecting(lineSegment)
-            || bottom.isIntersecting(lineSegment)
-            || left.isIntersecting(lineSegment)
-            || right.isIntersecting(lineSegment);
+        return top.isIntersectingWith(lineSegment)
+            || bottom.isIntersectingWith(lineSegment)
+            || left.isIntersectingWith(lineSegment)
+            || right.isIntersectingWith(lineSegment);
     }
 
 }

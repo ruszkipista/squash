@@ -7,6 +7,9 @@ import de.openhpi.squash.common.Display;
 import de.openhpi.squash.common.IObserver;
 import de.openhpi.squash.model.BallModel;
 import de.openhpi.squash.model.BoardModel;
+import de.openhpi.squash.model.IMovableRectangle;
+import de.openhpi.squash.model.IPositionableRectangle;
+import de.openhpi.squash.model.Speed;
 import de.openhpi.squash.view.BallView;
 import de.openhpi.squash.view.IDrawable;
 import de.openhpi.squash.view.BoardView;
@@ -19,6 +22,7 @@ public class SquashController implements IObserver {
 	BallView ballView;
 	BallModel ballModel;
 	float frameTimeInSec = 0.0f;
+	private Speed speed;  // reused by checkCollison()
 
 	private List<IDrawable> shapes = new ArrayList<IDrawable>();
 	
@@ -45,7 +49,7 @@ public class SquashController implements IObserver {
 		this.ballModel.setDistancePerSecond(display.canvasUnit*4, display.canvasUnit*2);
 	}
 
-	// process messages from View and Model
+	// process messages from Display
 	@Override
 	public void update(String message){
 		switch (message){
@@ -57,6 +61,7 @@ public class SquashController implements IObserver {
 			case "Display.NextFrame":
 			case "Display.MouseClicked":
 				this.calculateNextFrameInModels();
+				this.processCollisonsInModels();
 				if (this.finalizeNextFrameInModels()){
 					this.copyModelAttributesToViews();
 					this.display.update(this.shapes);
@@ -67,6 +72,28 @@ public class SquashController implements IObserver {
 
 	private void calculateNextFrameInModels(){
 		this.ballModel.calculateNextFrame(this.frameTimeInSec);
+	}
+
+	private void processCollisonsInModels(){
+		checkCollisonMovingInsideFixed(this.ballModel,this.boardModel);
+	}
+
+	private void checkCollisonMovingInsideFixed(IMovableRectangle movingObject, 
+								IPositionableRectangle fixedObject) {
+		speed = movingObject.getDistancePerSecond();
+		if (speed.x>0 && (movingObject.top.isIntersectingWith(fixedObject.right)
+						|| movingObject.bottom.isIntersectingWith(fixedObject.right))
+		 || speed.x<0 && (movingObject.top.isIntersectingWith(fixedObject.left)
+		 				|| movingObject.bottom.isIntersectingWith(fixedObject.left))
+		)
+			movingObject.changeDistancePerSecond(-1, 1);
+
+		if (speed.y>0 && (movingObject.left.isIntersectingWith(fixedObject.bottom)
+			|| movingObject.right.isIntersectingWith(fixedObject.bottom))
+		 || speed.y<0 && (movingObject.left.isIntersectingWith(fixedObject.top)
+			 || movingObject.right.isIntersectingWith(fixedObject.top))
+		)
+			movingObject.changeDistancePerSecond(1, -1);			
 	}
 
 	private boolean finalizeNextFrameInModels(){
