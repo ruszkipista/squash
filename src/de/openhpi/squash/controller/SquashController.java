@@ -5,9 +5,9 @@ import java.util.ArrayList;
 
 import de.openhpi.squash.common.Display;
 import de.openhpi.squash.common.IObserver;
-import de.openhpi.squash.model.MovableRectangle;
+import de.openhpi.squash.model.MovableRectangleModel;
 import de.openhpi.squash.model.BoardModel;
-import de.openhpi.squash.model.FixedRectangle;
+import de.openhpi.squash.model.FixedRectangleModel;
 import de.openhpi.squash.model.IMovableRectangle;
 import de.openhpi.squash.model.IPositionableRectangle;
 import de.openhpi.squash.model.Point;
@@ -26,9 +26,9 @@ public class SquashController implements IObserver {
 	BoardView boardView;
 	BoardModel boardModel;
 	RectangleView ballView;
-	MovableRectangle ballModel;
+	MovableRectangleModel ballModel;
 	RectangleView obstacleView;
-	FixedRectangle obstacleModel;
+	FixedRectangleModel obstacleModel;
 
 	private List<IDrawable> shapes = new ArrayList<IDrawable>();
 	
@@ -43,30 +43,31 @@ public class SquashController implements IObserver {
 		this.display = display;
 		this.display.registerObserver(this);
 
-		this.boardView = new BoardView();
+		this.boardView = new BoardView(display.backgroundColor);
 		this.shapes.add(this.boardView);
 
 		this.boardModel = new BoardModel(display.width, display.height);
 
-		this.ballView = new RectangleView();
+		this.ballView = new RectangleView(display.lightColor);
 		this.shapes.add(this.ballView);
 		
-		this.ballModel = new MovableRectangle(display.canvasUnit,
+		this.ballModel = new MovableRectangleModel(display.canvasUnit,
 												display.canvasUnit,
 												0,0,
 												display.canvasUnit*8, 
 												display.canvasUnit*6);
 
-		this.obstacleView = new RectangleView();
+		this.obstacleView = new RectangleView(display.darkColor);
 		this.shapes.add(this.obstacleView);
-		this.obstacleModel = new FixedRectangle(display.canvasUnit*16,
+		this.obstacleModel = new FixedRectangleModel(display.canvasUnit*16,
 												display.canvasUnit*8,
 												display.canvasUnit*8,
 												display.canvasUnit*7);
 		this.obstacleView.set(this.obstacleModel.width, 
 					this.obstacleModel.height,
 					this.obstacleModel.getPosition().x,
-					this.obstacleModel.getPosition().y);
+					this.obstacleModel.getPosition().y,
+					this.obstacleView.color);
 	}
 
 	// process messages from Display
@@ -171,6 +172,7 @@ public class SquashController implements IObserver {
 		this.ballView.set(this.ballModel.width, 
 						  this.ballModel.height,
 						  this.ballModel.getNewPosition().x,
-						  this.ballModel.getNewPosition().y);
+						  this.ballModel.getNewPosition().y,
+						  this.ballView.color);
 	}
 }

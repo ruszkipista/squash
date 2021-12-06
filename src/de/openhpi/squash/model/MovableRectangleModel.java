@@ -1,8 +1,8 @@
 package de.openhpi.squash.model;
 
-public class MovableRectangle extends IMovableRectangle implements IFrameable{
+public class MovableRectangleModel extends IMovableRectangle implements IFrameable{
 
-    public MovableRectangle(float width,  float height,
+    public MovableRectangleModel(float width,  float height,
                             float posX,   float posY,
                             float speedX, float speedY){
         super(width, height, posX, posY, speedX, speedY);

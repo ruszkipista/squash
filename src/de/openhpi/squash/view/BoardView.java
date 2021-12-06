@@ -4,11 +4,12 @@ import de.openhpi.squash.common.Display;
 
 public class BoardView extends IDrawable{
 
-	public void set(){
-
+	public BoardView(int color){
+        super.color = color;
 	}
 	
+    @Override
     public void draw(Display display){
-        display.background(display.color(display.backgroundColor));
+        display.background(display.color(super.color));
     }
 }
