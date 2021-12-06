@@ -105,21 +105,21 @@ public class SquashController implements IObserver {
 		movSpeed = movable.getDistancePerSecond();
 		movNewPos = movable.getNewPosition();
 		if (movSpeed.x>0 && fixed.right.isIntersectingWith(movable.top, movable.bottom)){
-			movable.reverseSpeedX();
-			movable.setNewPositionX(movNewPos.x-(movable.right.pointA.x-fixed.right.pointA.x));
+			movSpeed.reverseX();
+			movNewPos.x -= movable.right.pointA.x - fixed.right.pointA.x;
 		}
 		else if (movSpeed.x<0 && fixed.left.isIntersectingWith(movable.top, movable.bottom)){
-			movable.reverseSpeedX();
-			movable.setNewPositionX(fixed.left.pointA.x+(fixed.left.pointA.x-movNewPos.x));
+			movSpeed.reverseX();
+			movNewPos.x = fixed.left.pointA.x + fixed.left.pointA.x - movNewPos.x;
 		}
 
 		if (movSpeed.y>0 && fixed.bottom.isIntersectingWith(movable.left, movable.right)){
-			movable.reverseSpeedY();
-			movable.setNewPositionY(movNewPos.y-(movable.bottom.pointA.y-fixed.bottom.pointA.y));
+			movSpeed.reverseY();
+			movNewPos.y -= movable.bottom.pointA.y - fixed.bottom.pointA.y;
 		}
 		else if (movSpeed.y<0 && fixed.top.isIntersectingWith(movable.left, movable.right)){
-			movable.reverseSpeedY();
-			movable.setNewPositionY(fixed.top.pointA.y+(fixed.top.pointA.y-movNewPos.y));
+			movSpeed.reverseY();
+			movNewPos.y = fixed.top.pointA.y + fixed.top.pointA.y - movNewPos.y;
 		}
 	}
 
@@ -128,21 +128,21 @@ public class SquashController implements IObserver {
 		movSpeed = movable.getDistancePerSecond();
 		movNewPos = movable.getNewPosition();
 		if (movSpeed.x>0 && fixed.left.isIntersectingWith(movable.top, movable.bottom)){
-			movable.reverseSpeedX();
-			movable.setNewPositionX(movNewPos.x-(movable.right.pointA.x-fixed.left.pointA.x));
+			movSpeed.reverseX();
+			movNewPos.x -= movable.right.pointA.x - fixed.left.pointA.x;
 		}
 		else if (movSpeed.x<0 && fixed.right.isIntersectingWith(movable.top, movable.bottom)) {
-			movable.reverseSpeedX();
-			movable.setNewPositionX(fixed.right.pointA.x+(fixed.right.pointA.x-movNewPos.x));
+			movSpeed.reverseX();
+			movNewPos.x = fixed.right.pointA.x + fixed.right.pointA.x - movNewPos.x;
 		}
 
 		if (movSpeed.y>0 && fixed.top.isIntersectingWith(movable.left, movable.right)){
-			movable.reverseSpeedY();
-			movable.setNewPositionY(movNewPos.y-(movable.bottom.pointA.y-fixed.top.pointA.y));
+			movSpeed.reverseY();
+			movNewPos.y -= movable.bottom.pointA.y - fixed.top.pointA.y;
 		}
 		else if (movSpeed.y<0 && fixed.bottom.isIntersectingWith(movable.left, movable.right)) {
-			movable.reverseSpeedY();
-			movable.setNewPositionY(fixed.bottom.pointA.y+(fixed.bottom.pointA.y-movNewPos.y));
+			movSpeed.reverseY();
+			movNewPos.y = fixed.bottom.pointA.y + fixed.bottom.pointA.y - movNewPos.y;
 		}
 	}
 
