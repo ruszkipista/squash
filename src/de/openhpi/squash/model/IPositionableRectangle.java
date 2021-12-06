@@ -12,8 +12,9 @@ public abstract class IPositionableRectangle extends IRectangle {
     public LineSegment left   = new LineSegment(topLeft,    bottomLeft);
     public LineSegment right  = new LineSegment(topRight,   bottomRight);
 
-    public IPositionableRectangle(float width, float height){
+    public IPositionableRectangle(float width, float height, float posX, float posY){
         super(width, height);
+        this.position.set(posX, posY);
         this.setCorners(this.position);
     }
     

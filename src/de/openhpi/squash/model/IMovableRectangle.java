@@ -5,8 +5,11 @@ public abstract class IMovableRectangle extends IPositionableRectangle {
     private Speed distancePerSecond = new Speed(0,0);
     private Point newPosition = new Point(0,0);
 
-    public IMovableRectangle(float width, float height){
-        super(width, height);
+    public IMovableRectangle(float width,  float height,
+                             float posX,   float posY,
+                             float speedX, float speedY){
+        super(width, height, posX, posY);
+        this.distancePerSecond.set(speedX, speedY);
     }
     
     public void prepareMove(float lapsedTimeInSecond){
