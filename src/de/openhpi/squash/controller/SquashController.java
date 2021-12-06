@@ -7,6 +7,7 @@ import de.openhpi.squash.common.Display;
 import de.openhpi.squash.common.IObserver;
 import de.openhpi.squash.model.MovableRectangle;
 import de.openhpi.squash.model.BoardModel;
+import de.openhpi.squash.model.FixedRectangle;
 import de.openhpi.squash.model.IMovableRectangle;
 import de.openhpi.squash.model.IPositionableRectangle;
 import de.openhpi.squash.model.Point;
@@ -16,15 +17,18 @@ import de.openhpi.squash.view.IDrawable;
 import de.openhpi.squash.view.BoardView;
 
 public class SquashController implements IObserver {
-	private boolean modelChanged;
 	private Display display;
+	float frameTimeInSec = 0.0f;
+	private boolean modelChanged; // reused by finalizeNextFrameInModels()
+	private Speed movSpeed;       // reused by checkCollison()
+	private Point movNewPos;      // reused by checkCollison()
+
 	BoardView boardView;
 	BoardModel boardModel;
 	RectangleView ballView;
 	MovableRectangle ballModel;
-	float frameTimeInSec = 0.0f;
-	private Speed movSpeed;    // reused by checkCollison()
-	private Point movNewPos; // reused by checkCollison()
+	RectangleView obstacleView;
+	FixedRectangle obstacleModel;
 
 	private List<IDrawable> shapes = new ArrayList<IDrawable>();
 	
@@ -50,8 +54,19 @@ public class SquashController implements IObserver {
 		this.ballModel = new MovableRectangle(display.canvasUnit,
 												display.canvasUnit,
 												0,0,
-												display.canvasUnit*4, 
-												display.canvasUnit*2);
+												display.canvasUnit*8, 
+												display.canvasUnit*6);
+
+		this.obstacleView = new RectangleView();
+		this.shapes.add(this.obstacleView);
+		this.obstacleModel = new FixedRectangle(display.canvasUnit*16,
+												display.canvasUnit*8,
+												display.canvasUnit*8,
+												display.canvasUnit*7);
+		this.obstacleView.set(this.obstacleModel.width, 
+					this.obstacleModel.height,
+					this.obstacleModel.getPosition().x,
+					this.obstacleModel.getPosition().y);
 	}
 
 	// process messages from Display
@@ -81,6 +96,7 @@ public class SquashController implements IObserver {
 
 	private void processCollisonsInModels(){
 		checkCollisonMovableInsideFixed(this.ballModel,this.boardModel);
+		checkCollisonMovableOutsideFixed(this.ballModel,this.obstacleModel);
 	}
 
 	private void checkCollisonMovableInsideFixed(IMovableRectangle movable, 
@@ -147,15 +163,14 @@ public class SquashController implements IObserver {
 
 	private boolean finalizeNextFrameInModels(){
 		this.modelChanged = false;
-		this.modelChanged = this.modelChanged || 
-							this.ballModel.finalizeNextFrame();
+		this.modelChanged = this.modelChanged || this.ballModel.finalizeNextFrame();
 		return modelChanged;
 	}
 
 	private void copyModelAttributesToViews(){
 		this.ballView.set(this.ballModel.width, 
 						  this.ballModel.height,
-						this.ballModel.getNewPosition().x,
-						this.ballModel.getNewPosition().y);
+						  this.ballModel.getNewPosition().x,
+						  this.ballModel.getNewPosition().y);
 	}
 }
