@@ -17,4 +17,11 @@ public class Speed {
         this.x *= x;
         this.y *= y;        
     }
+
+    public void reverseX(){
+        this.x *= -1.0f;
+    }
+    public void reverseY(){
+        this.y *= -1.0f;
+    }
 }

@@ -104,30 +104,22 @@ public class SquashController implements IObserver {
 												IPositionableRectangle fixed) {
 		movSpeed = movable.getDistancePerSecond();
 		movNewPos = movable.getNewPosition();
-		if (movSpeed.x>0 && (movable.top.isIntersectingWith(fixed.right)
-						|| movable.bottom.isIntersectingWith(fixed.right))){
-			movable.changeDistancePerSecond(-1, 1);
-			movable.setNewPosition(movNewPos.x-(movable.right.pointA.x-fixed.right.pointA.x),
-									movNewPos.y);
+		if (movSpeed.x>0 && fixed.right.isIntersectingWith(movable.top, movable.bottom)){
+			movable.reverseSpeedX();
+			movable.setNewPositionX(movNewPos.x-(movable.right.pointA.x-fixed.right.pointA.x));
 		}
-		else if (movSpeed.x<0 && (movable.top.isIntersectingWith(fixed.left)
-		 					|| movable.bottom.isIntersectingWith(fixed.left))) {
-			movable.changeDistancePerSecond(-1, 1);
-			movable.setNewPosition(fixed.left.pointA.x+(fixed.left.pointA.x-movNewPos.x),
-									movNewPos.y);
+		else if (movSpeed.x<0 && fixed.left.isIntersectingWith(movable.top, movable.bottom)){
+			movable.reverseSpeedX();
+			movable.setNewPositionX(fixed.left.pointA.x+(fixed.left.pointA.x-movNewPos.x));
 		}
 
-		if (movSpeed.y>0 && (movable.left.isIntersectingWith(fixed.bottom)
-						|| movable.right.isIntersectingWith(fixed.bottom))){
-			movable.changeDistancePerSecond(1, -1);
-			movable.setNewPosition(movNewPos.x,
-									movNewPos.y-(movable.bottom.pointA.y-fixed.bottom.pointA.y));
+		if (movSpeed.y>0 && fixed.bottom.isIntersectingWith(movable.left, movable.right)){
+			movable.reverseSpeedY();
+			movable.setNewPositionY(movNewPos.y-(movable.bottom.pointA.y-fixed.bottom.pointA.y));
 		}
-		else if (movSpeed.y<0 && (movable.left.isIntersectingWith(fixed.top)
-							|| movable.right.isIntersectingWith(fixed.top))){
-			movable.changeDistancePerSecond(1, -1);
-			movable.setNewPosition(movNewPos.x,
-								fixed.top.pointA.y+(fixed.top.pointA.y-movNewPos.y));
+		else if (movSpeed.y<0 && fixed.top.isIntersectingWith(movable.left, movable.right)){
+			movable.reverseSpeedY();
+			movable.setNewPositionY(fixed.top.pointA.y+(fixed.top.pointA.y-movNewPos.y));
 		}
 	}
 
@@ -135,30 +127,22 @@ public class SquashController implements IObserver {
 													IPositionableRectangle fixed) {
 		movSpeed = movable.getDistancePerSecond();
 		movNewPos = movable.getNewPosition();
-		if (movSpeed.x>0 && (movable.top.isIntersectingWith(fixed.left)
-						|| movable.bottom.isIntersectingWith(fixed.left))){
-			movable.changeDistancePerSecond(-1, 1);
-			movable.setNewPosition(movNewPos.x-(movable.right.pointA.x-fixed.left.pointA.x),
-									movNewPos.y);
+		if (movSpeed.x>0 && fixed.left.isIntersectingWith(movable.top, movable.bottom)){
+			movable.reverseSpeedX();
+			movable.setNewPositionX(movNewPos.x-(movable.right.pointA.x-fixed.left.pointA.x));
 		}
-		else if (movSpeed.x<0 && (movable.top.isIntersectingWith(fixed.right)
-		 					|| movable.bottom.isIntersectingWith(fixed.right))) {
-			movable.changeDistancePerSecond(-1, 1);
-			movable.setNewPosition(fixed.right.pointA.x+(fixed.right.pointA.x-movNewPos.x),
-									movNewPos.y);
+		else if (movSpeed.x<0 && fixed.right.isIntersectingWith(movable.top, movable.bottom)) {
+			movable.reverseSpeedX();
+			movable.setNewPositionX(fixed.right.pointA.x+(fixed.right.pointA.x-movNewPos.x));
 		}
 
-		if (movSpeed.y>0 && (movable.left.isIntersectingWith(fixed.top)
-						|| movable.right.isIntersectingWith(fixed.top))){
-			movable.changeDistancePerSecond(1, -1);
-			movable.setNewPosition(movNewPos.x,
-									movNewPos.y-(movable.bottom.pointA.y-fixed.top.pointA.y));
+		if (movSpeed.y>0 && fixed.top.isIntersectingWith(movable.left, movable.right)){
+			movable.reverseSpeedY();
+			movable.setNewPositionY(movNewPos.y-(movable.bottom.pointA.y-fixed.top.pointA.y));
 		}
-		else if (movSpeed.y<0 && (movable.left.isIntersectingWith(fixed.bottom)
-							|| movable.right.isIntersectingWith(fixed.bottom))){
-			movable.changeDistancePerSecond(1, -1);
-			movable.setNewPosition(movNewPos.x,
-								fixed.bottom.pointA.y+(fixed.bottom.pointA.y-movNewPos.y));
+		else if (movSpeed.y<0 && fixed.bottom.isIntersectingWith(movable.left, movable.right)) {
+			movable.reverseSpeedY();
+			movable.setNewPositionY(fixed.bottom.pointA.y+(fixed.bottom.pointA.y-movNewPos.y));
 		}
 	}
 

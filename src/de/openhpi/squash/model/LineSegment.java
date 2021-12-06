@@ -13,6 +13,11 @@ public class LineSegment {
     /* https://www.geeksforgeeks.org/check-if-two-given-line-segments-intersect/
        returns true if 'this' and 'other' line segments intersect
     */
+    public boolean isIntersectingWith(LineSegment other1, LineSegment other2){
+        return this.isIntersectingWith(other1)
+            || this.isIntersectingWith(other2);
+    }
+    
     public boolean isIntersectingWith(LineSegment other) {
         // Find the four orientations needed for general and
         // special cases
