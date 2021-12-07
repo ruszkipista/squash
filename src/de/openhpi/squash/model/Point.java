@@ -1,9 +1,9 @@
 package de.openhpi.squash.model;
 
 public class Point {
+    private static Point other;  // enforce variable reuse in 'equals'
     public float x;
     public float y;
-    private Point other;  // enforce variable reuse in 'equals'
 
     public Point(float x, float y) {
         set(x, y);

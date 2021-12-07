@@ -9,9 +9,9 @@ public abstract class IPositionableRectangle extends IRectangle {
     public Point center      = new Point(0,0);
     public Point[] corners = new Point[5];
     public LineSegment top    = new LineSegment(topLeft,    topRight);
-    public LineSegment bottom = new LineSegment(bottomLeft, bottomRight);
-    public LineSegment left   = new LineSegment(topLeft,    bottomLeft);
     public LineSegment right  = new LineSegment(topRight,   bottomRight);
+    public LineSegment bottom = new LineSegment(bottomRight,bottomLeft);
+    public LineSegment left   = new LineSegment(bottomLeft, topLeft);
     public LineSegment[] sides = new LineSegment[4];
 
     public IPositionableRectangle(float width, float height, float posX, float posY){

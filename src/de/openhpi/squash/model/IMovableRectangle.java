@@ -1,6 +1,8 @@
 package de.openhpi.squash.model;
 
 public abstract class IMovableRectangle extends IPositionableRectangle {
+    public boolean justBounced = true;
+    public boolean newJustBounced = false;
     protected boolean modelChanged;
     private Speed distancePerSecond = new Speed(0,0);
     private Point newTopLeft     = new Point(0,0);
@@ -26,7 +28,7 @@ public abstract class IMovableRectangle extends IPositionableRectangle {
     
     public void prepareMove(float lapsedTimeInSecond){
         // calculate new corners
-        this.newTopLeft.copyAndMove(super.topLeft, distancePerSecond, lapsedTimeInSecond);
+        this.newTopLeft.copyAndMove(super.topLeft, this.distancePerSecond, lapsedTimeInSecond);
         this.newTopRight.copyAndMove(this.newTopLeft, +super.width, 0);
         this.newBottomRight.copyAndMove(this.newTopLeft, +super.width, +super.height);
         this.newBottomLeft.copyAndMove(this.newTopLeft, 0, +super.height);
@@ -38,13 +40,22 @@ public abstract class IMovableRectangle extends IPositionableRectangle {
 
     public boolean finalizeMove() {
         this.modelChanged = ! super.position.equals(this.newPosition);
-        // overwrite position with new
-        super.position.copy(this.newPosition);
+        // overwrite corners with newCorners
+        if (this.modelChanged){
+            this.justBounced = this.newJustBounced;
+            super.topLeft.copy(this.newTopLeft);
+            super.topRight.copy(this.newTopRight);
+            super.bottomLeft.copy(this.newBottomLeft);
+            super.bottomRight.copy(this.newBottomRight);
+        }
         return this.modelChanged;
     }
 
-    public Point getNewPosition(){
-        return this.newPosition;
+    public void setNewPositionX(float x){
+        this.newPosition.x = x;
+    }
+    public void setNewPositionY(float y){
+        this.newPosition.y = y;
     }
 
     public Speed getDistancePerSecond(){

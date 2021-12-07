@@ -22,6 +22,6 @@ public class Speed {
         this.x = -this.x;
     }
     public void negateY(){
-        this.y *= -this.y;
+        this.y = -this.y;
     }
 }
