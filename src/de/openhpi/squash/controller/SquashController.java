@@ -8,6 +8,7 @@ import de.openhpi.squash.common.IObserver;
 import de.openhpi.squash.model.MovableRectangleModel;
 import de.openhpi.squash.model.Speed;
 import de.openhpi.squash.model.BoardModel;
+import de.openhpi.squash.model.Collison;
 import de.openhpi.squash.model.FixedRectangleModel;
 import de.openhpi.squash.model.IMovableRectangle;
 import de.openhpi.squash.model.IPositionableRectangle;
@@ -57,8 +58,8 @@ public class SquashController implements IObserver {
 		this.obstacleView = new RectangleView(display.darkColor);
 		this.shapes.add(this.obstacleView);
 		this.obstacleModel = new FixedRectangleModel(display.canvasUnit*16,
-												display.canvasUnit*8,
-												display.canvasUnit*8,
+												display.canvasUnit*10,
+												display.canvasUnit*6,
 												display.canvasUnit*7);
 		this.obstacleView.set(this.obstacleModel.width, 
 					this.obstacleModel.height,
@@ -93,48 +94,8 @@ public class SquashController implements IObserver {
 	}
 
 	private void processCollisonsInModels(){
-		checkCollisonMovableVsFixed(this.ballModel,this.boardModel);
-		checkCollisonMovableVsFixed(this.ballModel,this.obstacleModel);
-	}
-
-	private void checkCollisonMovableVsFixed(IMovableRectangle movable, 
-											IPositionableRectangle fixed) {
-		int[] sideCollisionCounts = new int[fixed.sides.length];
-		int maxCount = 0;
-		int maxCountIndex = -1;
-
-		if (movable.justBounced){
-			movable.newJustBounced = false;
-			return;
-		}
-
-		for (int i=0; i<fixed.sides.length;i++) {
-			sideCollisionCounts[i] = 0;
-			// start from 1, leave out "center" at [0]
-			for (int j=1; j<movable.corners.length;j++)
-				sideCollisionCounts[i] += fixed.sides[i].isIntersectingWith(movable.corners[j], movable.newCorners[j]) ? 1 : 0;
-			if (maxCount < sideCollisionCounts[i]){
-				maxCount = sideCollisionCounts[i];
-				maxCountIndex = i;
-			}
-		}
-		if (maxCount > 0){
-			Speed movSpeed = movable.getDistancePerSecond();
-			if ((maxCountIndex == 0 || maxCountIndex == 2) && movSpeed.y!=0) {
-				if (movSpeed.y>0)
-					movable.setNewPositionY(fixed.sides[maxCountIndex].pointA.y-movable.height);
-				else
-					movable.setNewPositionY(fixed.sides[maxCountIndex].pointA.y);
-				movSpeed.negateY();
-			} else {
-				if (movSpeed.x>0)
-					movable.setNewPositionX(fixed.sides[maxCountIndex].pointA.x-movable.width);
-				else
-					movable.setNewPositionX(fixed.sides[maxCountIndex].pointA.x);
-				movSpeed.negateX();
-			}
-			movable.newJustBounced = true;
-		}
+		Collison.checkMovableVsFixed(this.ballModel,this.boardModel);
+		Collison.checkMovableVsFixed(this.ballModel,this.obstacleModel);
 	}
 
 	private boolean finalizeNextFrameInModels(){

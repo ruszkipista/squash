@@ -40,9 +40,10 @@ public abstract class IMovableRectangle extends IPositionableRectangle {
 
     public boolean finalizeMove() {
         this.modelChanged = ! super.position.equals(this.newPosition);
+        this.justBounced = this.newJustBounced;
+        this.newJustBounced = false;
         // overwrite corners with newCorners
         if (this.modelChanged){
-            this.justBounced = this.newJustBounced;
             super.topLeft.copy(this.newTopLeft);
             super.topRight.copy(this.newTopRight);
             super.bottomLeft.copy(this.newBottomLeft);
@@ -54,6 +55,7 @@ public abstract class IMovableRectangle extends IPositionableRectangle {
     public void setNewPositionX(float x){
         this.newPosition.x = x;
     }
+
     public void setNewPositionY(float y){
         this.newPosition.y = y;
     }
