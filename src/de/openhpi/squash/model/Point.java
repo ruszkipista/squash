@@ -32,7 +32,7 @@ public class Point {
     @Override
     public boolean equals(Object o){
         this.other = (Point) o;
-        return !(this.x == this.other.x && this.y == this.other.y);
+        return this.x == this.other.x && this.y == this.other.y;
     }
 
 }

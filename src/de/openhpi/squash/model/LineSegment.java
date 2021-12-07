@@ -17,31 +17,35 @@ public class LineSegment {
         return this.isIntersectingWith(other1)
             || this.isIntersectingWith(other2);
     }
-    
+
     public boolean isIntersectingWith(LineSegment other) {
+        return this.isIntersectingWith(other);
+    }
+
+    public boolean isIntersectingWith(Point pointC, Point pointD) {
         // Find the four orientations needed for general and
         // special cases
-        int o1 = getOrientation(this.pointA, this.pointB, other.pointA);
-        int o2 = getOrientation(this.pointA, this.pointB, other.pointB);
-        int o3 = getOrientation(other.pointA, other.pointB, this.pointA);
-        int o4 = getOrientation(other.pointA, other.pointB, this.pointB);
+        int o1 = getOrientation(this.pointA, this.pointB, pointC);
+        int o2 = getOrientation(this.pointA, this.pointB, pointD);
+        int o3 = getOrientation(pointC, pointD, this.pointA);
+        int o4 = getOrientation(pointC, pointD, this.pointB);
      
         // General case
         if (o1 != o2 && o3 != o4)
             return true;
      
         // Special Cases
-        // this.pointA, this.pointB and other.pointA are collinear and other.pointA lies on segment "this"
-        if (o1 == 0 && onSegment(this.pointA, other.pointA, this.pointB)) return true;
+        // this.pointA, this.pointB and pointC are collinear and pointC lies on segment "this"
+        if (o1 == 0 && onSegment(this.pointA, pointC, this.pointB)) return true;
      
-        // this.pointA, this.pointB and other.pointB are collinear and other.pointB lies on segment "this"
-        if (o2 == 0 && onSegment(this.pointA, other.pointB, this.pointB)) return true;
+        // this.pointA, this.pointB and pointD are collinear and pointD lies on segment "this"
+        if (o2 == 0 && onSegment(this.pointA, pointD, this.pointB)) return true;
      
-        // other.pointA, other.pointB and this.pointA are collinear and this.pointA lies on segment "other"
-        if (o3 == 0 && onSegment(other.pointA, this.pointA, other.pointB)) return true;
+        // pointC, pointD and this.pointA are collinear and this.pointA lies on segment "other"
+        if (o3 == 0 && onSegment(pointC, this.pointA, pointD)) return true;
      
-        // other.pointA, other.pointB and this.pointB are collinear and this.pointB lies on segment "other"
-        if (o4 == 0 && onSegment(other.pointA, this.pointB, other.pointB)) return true;
+        // pointC, pointD and this.pointB are collinear and this.pointB lies on segment "other"
+        if (o4 == 0 && onSegment(pointC, this.pointB, pointD)) return true;
      
         return false; // Doesn't fall in any of the above cases
     }

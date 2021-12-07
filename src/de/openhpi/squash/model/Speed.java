@@ -18,10 +18,10 @@ public class Speed {
         this.y *= y;        
     }
 
-    public void reverseX(){
-        this.x *= -1.0f;
+    public void negateX(){
+        this.x = -this.x;
     }
-    public void reverseY(){
-        this.y *= -1.0f;
+    public void negateY(){
+        this.y *= -this.y;
     }
 }
