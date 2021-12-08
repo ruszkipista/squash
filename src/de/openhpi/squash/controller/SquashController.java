@@ -7,7 +7,6 @@ import de.openhpi.squash.common.Display;
 import de.openhpi.squash.common.IObserver;
 import de.openhpi.squash.model.MovableRectangleModel;
 import de.openhpi.squash.model.BoardModel;
-import de.openhpi.squash.model.Collison;
 import de.openhpi.squash.model.FixedRectangleModel;
 import de.openhpi.squash.view.RectangleView;
 import de.openhpi.squash.view.IDrawable;
@@ -91,8 +90,8 @@ public class SquashController implements IObserver {
 	}
 
 	private void processCollisonsInModels(){
-		Collison.checkMovableVsFixed(this.ballModel,this.boardModel);
-		Collison.checkMovableVsFixed(this.ballModel,this.obstacleModel);
+		this.ballModel.checCollisonVsFixed(this.boardModel);
+		this.ballModel.checCollisonVsFixed(this.obstacleModel);
 	}
 
 	private boolean finalizeNextFrameInModels(){

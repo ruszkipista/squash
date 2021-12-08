@@ -7,7 +7,7 @@ public abstract class IPositionableRectangle extends IRectangle {
     public Point bottomLeft  = new Point(0,0);
     protected Point position = topLeft; // points to the topLeft corner
     public Point center      = new Point(0,0);
-    public Point[] corners = new Point[5];
+    public Point[] corners = new Point[4];
     public LineSegment top    = new LineSegment(topLeft,    topRight);
     public LineSegment right  = new LineSegment(topRight,   bottomRight);
     public LineSegment bottom = new LineSegment(bottomRight,bottomLeft);
@@ -18,12 +18,11 @@ public abstract class IPositionableRectangle extends IRectangle {
         super(width, height);
         this.position.set(posX, posY);
         this.setCorners();
-        corners[0] = center;
         // clockwise arrangement of corners
-        corners[1] = topLeft;
-        corners[2] = topRight;
-        corners[3] = bottomRight;
-        corners[4] = bottomLeft;
+        corners[0] = topLeft;
+        corners[1] = topRight;
+        corners[2] = bottomRight;
+        corners[3] = bottomLeft;
         // clockwise arrangement of sides
         sides[0] = top;
         sides[1] = right;

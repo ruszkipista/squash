@@ -18,17 +18,20 @@ public abstract class IMovableRectangle extends IPositionableRectangle {
                              float speedX, float speedY){
         super(width, height, posX, posY);
         this.distancePerSecond.set(speedX, speedY);
-        newCorners[0] = newCenter;
         // clockwise arrangement of new corners
-        newCorners[1] = newTopLeft;
-        newCorners[2] = newTopRight;
-        newCorners[3] = newBottomRight;
-        newCorners[4] = newBottomLeft;
+        newCorners[0] = newTopLeft;
+        newCorners[1] = newTopRight;
+        newCorners[2] = newBottomRight;
+        newCorners[3] = newBottomLeft;
     }
     
     public void prepareMove(float lapsedTimeInSecond){
         // calculate new corners
         this.newTopLeft.copyAndMove(super.topLeft, this.distancePerSecond, lapsedTimeInSecond);
+        calculateNewCorners();
+    }
+
+    public void calculateNewCorners(){
         this.newTopRight.copyAndMove(this.newTopLeft, +super.width, 0);
         this.newBottomRight.copyAndMove(this.newTopLeft, +super.width, +super.height);
         this.newBottomLeft.copyAndMove(this.newTopLeft, 0, +super.height);
@@ -52,14 +55,6 @@ public abstract class IMovableRectangle extends IPositionableRectangle {
         return this.modelChanged;
     }
 
-    public void setNewPositionX(float x){
-        this.newPosition.x = x;
-    }
-
-    public void setNewPositionY(float y){
-        this.newPosition.y = y;
-    }
-
     public Speed getDistancePerSecond(){
         return this.distancePerSecond;
     }
@@ -72,4 +67,52 @@ public abstract class IMovableRectangle extends IPositionableRectangle {
         this.distancePerSecond.change(x,y);
     }
 
+    private int[] sideIntersectCounts = new int[4]; // we deal with rectangles only
+    private int maxIntersectCount;
+    private int maxIntersectCountIndex;
+    private int i;
+    private int j;
+
+    public void checCollisonVsFixed(IPositionableRectangle other) {
+        if (this.justBounced){
+            this.newJustBounced = false;
+			return;
+		}
+        this.distancePerSecond = this.getDistancePerSecond();
+        if (this.distancePerSecond.x==0 && this.distancePerSecond.y==0){
+            return;
+        }
+        maxIntersectCount = 0;
+        maxIntersectCountIndex = -1;
+		for (i=0; i<other.sides.length;i++) {
+			sideIntersectCounts[i] = 0;
+			for (j=0; j<this.corners.length;j++)
+				sideIntersectCounts[i] += other.sides[i]
+                                         .isIntersectingWith(super.corners[j], this.newCorners[j])
+                                         ? 1 : 0;
+			if (maxIntersectCount < sideIntersectCounts[i]){
+				maxIntersectCount = sideIntersectCounts[i];
+				maxIntersectCountIndex = i;
+			}
+		}
+		if (maxIntersectCount > 0){
+            // top or bottom
+			if (maxIntersectCountIndex == 0 || maxIntersectCountIndex == 2) {
+				if (this.distancePerSecond.y>0)
+                    this.newPosition.y = other.sides[maxIntersectCountIndex].pointA.y-this.height;
+				else if (this.distancePerSecond.y<0)
+                    this.newPosition.y = other.sides[maxIntersectCountIndex].pointA.y;
+				this.distancePerSecond.negateY();
+			} else {
+                // right or left
+				if (this.distancePerSecond.x>0)
+                    this.newPosition.x = other.sides[maxIntersectCountIndex].pointA.x-this.width;
+				else if (this.distancePerSecond.x<0)
+                    this.newPosition.x = other.sides[maxIntersectCountIndex].pointA.x;
+				this.distancePerSecond.negateX();
+			}
+			this.newJustBounced = true;
+            calculateNewCorners();
+		}
+	}
 }
