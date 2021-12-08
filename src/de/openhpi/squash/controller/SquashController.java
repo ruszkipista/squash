@@ -7,7 +7,6 @@ import de.openhpi.squash.common.Display;
 import de.openhpi.squash.common.IObserver;
 import de.openhpi.squash.model.MovableRectangleModel;
 import de.openhpi.squash.model.BoardModel;
-import de.openhpi.squash.model.FixedRectangleModel;
 import de.openhpi.squash.view.RectangleView;
 import de.openhpi.squash.view.IDrawable;
 import de.openhpi.squash.view.BoardView;
@@ -22,7 +21,7 @@ public class SquashController implements IObserver {
 	RectangleView ballView;
 	MovableRectangleModel ballModel;
 	RectangleView obstacleView;
-	FixedRectangleModel obstacleModel;
+	MovableRectangleModel obstacleModel;
 
 	private List<IDrawable> shapes = new ArrayList<IDrawable>();
 	
@@ -53,14 +52,15 @@ public class SquashController implements IObserver {
 
 		this.obstacleView = new RectangleView(display.darkColor);
 		this.shapes.add(this.obstacleView);
-		this.obstacleModel = new FixedRectangleModel(display.canvasUnit*16,
+		this.obstacleModel = new MovableRectangleModel(display.canvasUnit*16,
 												display.canvasUnit*10,
 												display.canvasUnit*6,
-												display.canvasUnit*7);
+												display.canvasUnit*7,
+												0,0);
 		this.obstacleView.set(this.obstacleModel.width, 
 					this.obstacleModel.height,
-					this.obstacleModel.getPosition().x,
-					this.obstacleModel.getPosition().y,
+					this.obstacleModel.getPositionX(),
+					this.obstacleModel.getPositionY(),
 					this.obstacleView.color);
 	}
 
@@ -103,8 +103,8 @@ public class SquashController implements IObserver {
 	private void copyModelAttributesToViews(){
 		this.ballView.set(this.ballModel.width, 
 						  this.ballModel.height,
-						  this.ballModel.getPosition().x,
-						  this.ballModel.getPosition().y,
+						  this.ballModel.getPositionX(),
+						  this.ballModel.getPositionY(),
 						  this.ballView.color);
 	}
 }
