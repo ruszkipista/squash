@@ -4,6 +4,10 @@ public class Speed {
     public float x;
     public float y;
 
+    public Speed(){
+        set(0,0);
+    }
+    
     public Speed(float x, float y) {
         set(x, y);
     }

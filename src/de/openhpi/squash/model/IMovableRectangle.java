@@ -4,11 +4,11 @@ public abstract class IMovableRectangle extends IPositionableRectangle {
     private boolean justBounced = true;
     private boolean newJustBounced = false;
     protected boolean modelChanged;
-    private Speed distancePerSecond = new Speed(0,0);
-    private Point newTopLeft     = new Point(0,0);
-    private Point newTopRight    = new Point(0,0);
-    private Point newBottomRight = new Point(0,0);
-    private Point newBottomLeft  = new Point(0,0);
+    private Speed distancePerSecond = new Speed();
+    private Point newTopLeft     = new Point();
+    private Point newTopRight    = new Point();
+    private Point newBottomRight = new Point();
+    private Point newBottomLeft  = new Point();
     // clockwise arrangement of new corners    
     private Point[] newCorners = {newTopLeft,newTopRight,newBottomRight,newBottomLeft};
 
@@ -57,12 +57,11 @@ public abstract class IMovableRectangle extends IPositionableRectangle {
         this.distancePerSecond.change(x,y);
     }
 
-    private int maxIntersectCount;
-    private int maxIntersectCountIndex;
-    private int i;
-    private int j;
+    public void checkCollisonVsFixed(IPositionableRectangle other) {
+        int maxIntersectCount = 0;
+        int maxIntersectCountIndex = -1;
+        int[] sideIntersectCounts = new int[other.sides.length];
 
-    public void checCollisonVsFixed(IPositionableRectangle other) {
         if (this.justBounced){
             this.newJustBounced = false;
 			return;
@@ -71,15 +70,14 @@ public abstract class IMovableRectangle extends IPositionableRectangle {
         if (this.distancePerSecond.x==0 && this.distancePerSecond.y==0){
             return;
         }
-        maxIntersectCount = 0;
-        maxIntersectCountIndex = -1;
-		for (i=0; i<other.sides.length;i++) {
-			other.sideIntersectCounts[i] = 0;
-			for (j=0; j<this.corners.length;j++)
-				other.sideIntersectCounts[i] += 
+
+		for (int i=0; i<other.sides.length;i++) {
+			sideIntersectCounts[i] = 0;
+			for (int j=0; j<this.corners.length;j++)
+				sideIntersectCounts[i] += 
                     other.sides[i].isIntersectingWith(super.corners[j], this.newCorners[j]) ? 1 : 0;
-			if (maxIntersectCount < other.sideIntersectCounts[i]){
-				maxIntersectCount = other.sideIntersectCounts[i];
+			if (maxIntersectCount < sideIntersectCounts[i]){
+				maxIntersectCount = sideIntersectCounts[i];
 				maxIntersectCountIndex = i;
 			}
 		}

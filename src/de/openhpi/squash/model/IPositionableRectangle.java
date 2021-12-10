@@ -1,10 +1,10 @@
 package de.openhpi.squash.model;
 
 public abstract class IPositionableRectangle extends IRectangle {
-    protected Point topLeft     = new Point(0,0);
-    protected Point topRight    = new Point(0,0);
-    protected Point bottomRight = new Point(0,0);
-    protected Point bottomLeft  = new Point(0,0);
+    protected Point topLeft     = new Point();
+    protected Point topRight    = new Point();
+    protected Point bottomRight = new Point();
+    protected Point bottomLeft  = new Point();
     // clockwise arrangement of corners    
     protected Point[] corners = {topLeft,topRight,bottomRight,bottomLeft};
     private LineSegment top    = new LineSegment(topLeft,    topRight);
@@ -13,7 +13,6 @@ public abstract class IPositionableRectangle extends IRectangle {
     private LineSegment left   = new LineSegment(bottomLeft, topLeft);
     // clockwise arrangement of sides
     protected LineSegment[] sides = {top,right,bottom,left};
-    public int[] sideIntersectCounts = new int[4]; // we deal with rectangles only
 
     public IPositionableRectangle(float width, float height, float posX, float posY){
         super(width, height);

@@ -1,10 +1,13 @@
 package de.openhpi.squash.model;
 
 public class Point {
-    private static Point other;  // enforce variable reuse in 'equals'
     public float x;
     public float y;
 
+    public Point(){
+        set(0, 0);
+    }
+    
     public Point(float x, float y) {
         set(x, y);
     }
@@ -31,8 +34,11 @@ public class Point {
 
     @Override
     public boolean equals(Object o){
-        other = (Point) o;
-        return this.x == other.x && this.y == other.y;
+        if (o instanceof Point){
+            Point other = (Point) o;
+            return this.x == other.x && this.y == other.y;
+        } else 
+            return false;
     }
 
 }

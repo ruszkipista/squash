@@ -90,8 +90,8 @@ public class SquashController implements IObserver {
 	}
 
 	private void processCollisonsInModels(){
-		this.ballModel.checCollisonVsFixed(this.boardModel);
-		this.ballModel.checCollisonVsFixed(this.obstacleModel);
+		this.ballModel.checkCollisonVsFixed(this.boardModel);
+		this.ballModel.checkCollisonVsFixed(this.obstacleModel);
 	}
 
 	private boolean finalizeNextFrameInModels(){

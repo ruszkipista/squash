@@ -55,7 +55,7 @@ public class LineSegment {
     // 0 --> p, q and r are collinear
     // 1 --> Clockwise
     // 2 --> Counterclockwise
-    static int getOrientation(Point p, Point q, Point r) {
+    private int getOrientation(Point p, Point q, Point r) {
         // formula:  https://www.geeksforgeeks.org/orientation-3-ordered-points/
         float val = (q.y - p.y) * (r.x - q.x) - (q.x - p.x) * (r.y - q.y);
     
@@ -67,7 +67,7 @@ public class LineSegment {
 
     // Given three collinear points p, q, r, 
     // the function checks if point q lies on line segment 'pr'
-    static boolean onSegment(Point p, Point q, Point r) {
+    private boolean onSegment(Point p, Point q, Point r) {
         if (q.x <= Math.max(p.x, r.x) && 
             q.x >= Math.min(p.x, r.x) &&
             q.y <= Math.max(p.y, r.y) && 
