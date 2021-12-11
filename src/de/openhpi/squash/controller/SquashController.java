@@ -7,9 +7,11 @@ import de.openhpi.squash.common.Display;
 import de.openhpi.squash.common.IObserver;
 import de.openhpi.squash.model.MovableRectangleModel;
 import de.openhpi.squash.model.BoardModel;
+import de.openhpi.squash.model.CounterModel;
 import de.openhpi.squash.view.RectangleView;
 import de.openhpi.squash.view.IDrawable;
 import de.openhpi.squash.view.BoardView;
+import de.openhpi.squash.view.CounterView;
 
 public class SquashController implements IObserver {
 	private Display display;
@@ -22,6 +24,8 @@ public class SquashController implements IObserver {
 	MovableRectangleModel ballModel;
 	RectangleView obstacleView;
 	MovableRectangleModel obstacleModel;
+	CounterModel counterModel;
+	CounterView  counterView;
 
 	private List<IDrawable> shapes = new ArrayList<IDrawable>();
 	
@@ -40,6 +44,10 @@ public class SquashController implements IObserver {
 		this.shapes.add(this.boardView);
 
 		this.boardModel = new BoardModel(display.width, display.height);
+
+		this.counterModel = new CounterModel(0);
+		this.counterView  = new CounterView(10, 10, 111);
+		this.shapes.add(this.counterView);
 
 		this.ballView = new RectangleView(display.lightColor);
 		this.shapes.add(this.ballView);
@@ -74,13 +82,17 @@ public class SquashController implements IObserver {
 				break;
 
 			case "Display.NextFrame":
-			case "Display.MouseClicked":
 				this.calculateNextFrameInModels();
 				this.processCollisonsInModels();
 				if (this.finalizeNextFrameInModels()){
 					this.copyModelAttributesToViews();
 					this.display.update(this.shapes);
 				}
+				break;
+
+			case "Display.MouseClicked":
+				this.counterModel.increment(); 
+				// no need to trigger display.update(), because "Display.NextFrame" will do it in a bit
 				break;
 		}
 	}
@@ -97,6 +109,7 @@ public class SquashController implements IObserver {
 	private boolean finalizeNextFrameInModels(){
 		this.modelChanged = false;
 		this.modelChanged = this.ballModel.finalizeNextFrame() || this.modelChanged;
+		this.modelChanged = this.counterModel.finalizeNextFrame() || this.modelChanged;
 		return modelChanged;
 	}
 
@@ -106,5 +119,8 @@ public class SquashController implements IObserver {
 						  this.ballModel.getPositionX(),
 						  this.ballModel.getPositionY(),
 						  this.ballView.color);
+
+		this.counterView.set(this.counterModel.getCount(), 
+							 this.counterView.color);
 	}
 }
