@@ -1,6 +1,7 @@
 package de.openhpi.squash.controller;
 
 import java.util.List;
+import java.util.Random;
 import java.util.ArrayList;
 
 import de.openhpi.squash.common.Display;
@@ -15,17 +16,17 @@ import de.openhpi.squash.view.CounterView;
 
 public class SquashController implements IObserver {
 	private Display display;
-	float frameTimeInSec = 0.0f;
-	private boolean modelChanged; // reused by finalizeNextFrameInModels()
+	private float frameTimeInSec = 0.0f;
+	private Random random = new Random();
 
-	BoardView boardView;
-	BoardModel boardModel;
-	RectangleView ballView;
-	MovableRectangleModel ballModel;
-	RectangleView obstacleView;
-	MovableRectangleModel obstacleModel;
-	CounterModel counterModel;
-	CounterView  counterView;
+	private BoardView boardView;
+	private BoardModel boardModel;
+	private RectangleView ballView;
+	private MovableRectangleModel ballModel;
+	private RectangleView obstacleView;
+	private MovableRectangleModel obstacleModel;
+	private CounterModel counterModel;
+	private CounterView  counterView;
 
 	private List<IDrawable> shapes = new ArrayList<IDrawable>();
 	
@@ -53,18 +54,18 @@ public class SquashController implements IObserver {
 		this.shapes.add(this.ballView);
 		
 		this.ballModel = new MovableRectangleModel(display.canvasUnit,
-												display.canvasUnit,
-												0,0,
-												display.canvasUnit*8, 
-												display.canvasUnit*6);
+													display.canvasUnit,
+													0,0,
+													display.canvasUnit*8, 
+													display.canvasUnit*6);
 
 		this.obstacleView = new RectangleView(display.darkColor);
 		this.shapes.add(this.obstacleView);
 		this.obstacleModel = new MovableRectangleModel(display.canvasUnit*16,
-												display.canvasUnit*10,
-												display.canvasUnit*6,
-												display.canvasUnit*7,
-												0,0);
+														display.canvasUnit*10,
+														display.canvasUnit*6,
+														display.canvasUnit*7,
+														0,0);
 		this.obstacleView.set(this.obstacleModel.width, 
 					this.obstacleModel.height,
 					this.obstacleModel.getPositionX(),
@@ -99,18 +100,21 @@ public class SquashController implements IObserver {
 
 	private void calculateNextFrameInModels(){
 		this.ballModel.calculateNextFrame(this.frameTimeInSec);
+		this.obstacleModel.calculateNextFrame(this.frameTimeInSec);
 	}
 
 	private void processCollisonsInModels(){
-		this.ballModel.checkCollisonVsFixed(this.boardModel);
-		this.ballModel.checkCollisonVsFixed(this.obstacleModel);
+		this.ballModel.checkCollison(this.boardModel);
+		this.ballModel.checkCollison(this.obstacleModel);
 	}
 
 	private boolean finalizeNextFrameInModels(){
-		this.modelChanged = false;
-		this.modelChanged = this.ballModel.finalizeNextFrame() || this.modelChanged;
-		this.modelChanged = this.counterModel.finalizeNextFrame() || this.modelChanged;
-		return modelChanged;
+		boolean changed;
+		changed = false;
+		changed = this.ballModel.finalizeNextFrame()     || changed;
+		changed = this.obstacleModel.finalizeNextFrame() || changed;
+		changed = this.counterModel.finalizeNextFrame()  || changed;
+		return changed;
 	}
 
 	private void copyModelAttributesToViews(){
@@ -119,7 +123,9 @@ public class SquashController implements IObserver {
 						  this.ballModel.getPositionX(),
 						  this.ballModel.getPositionY(),
 						  this.ballView.color);
-
+		if (this.obstacleModel.justGotHit){
+			this.obstacleView.color = random.nextInt(256);
+		}
 		this.counterView.set(this.counterModel.getCount(), 
 							 this.counterView.color);
 	}

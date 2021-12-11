@@ -20,6 +20,7 @@ public abstract class IMovableRectangle extends IPositionableRectangle {
     }
     
     public void prepareMove(float lapsedTimeInSecond){
+        super.justGotHit = false;
         // calculate new corners
         this.newTopLeft.copyAndMove(super.topLeft, this.distancePerSecond, lapsedTimeInSecond);
         calculateNewCorners();
@@ -57,7 +58,11 @@ public abstract class IMovableRectangle extends IPositionableRectangle {
         this.distancePerSecond.change(x,y);
     }
 
-    public void checkCollisonVsFixed(IPositionableRectangle other) {
+    public void checkCollison(IMovableRectangle other) {
+        checkCollison(other.getPositionableRectangle());
+    }
+
+    public void checkCollison(IPositionableRectangle other) {
         int maxIntersectCount = 0;
         int maxIntersectCountIndex = -1;
         int[] sideIntersectCounts = new int[other.sides.length];
@@ -73,7 +78,7 @@ public abstract class IMovableRectangle extends IPositionableRectangle {
 
 		for (int i=0; i<other.sides.length;i++) {
 			sideIntersectCounts[i] = 0;
-			for (int j=0; j<this.corners.length;j++)
+			for (int j=0; j<super.corners.length;j++)
 				sideIntersectCounts[i] += 
                     other.sides[i].isIntersectingWith(super.corners[j], this.newCorners[j]) ? 1 : 0;
 			if (maxIntersectCount < sideIntersectCounts[i]){
@@ -98,7 +103,9 @@ public abstract class IMovableRectangle extends IPositionableRectangle {
 				this.distancePerSecond.negateX();
 			}
 			this.newJustBounced = true;
+            other.justGotHit = true;
             calculateNewCorners();
 		}
 	}
+
 }

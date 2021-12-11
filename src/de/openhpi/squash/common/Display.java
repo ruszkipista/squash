@@ -9,13 +9,13 @@ import de.openhpi.squash.view.IDrawable;
 import de.openhpi.squash.controller.SquashController;
 
 public class Display extends PApplet implements IObservable{
-	public int canvasWidth;
-	public int canvasHeight;
+	public int   canvasWidth;
+	public int   canvasHeight;
 	public float canvasUnit;
 	public float drawFrameRate;
-	public int backgroundColor;
-	public int darkColor;
-	public int lightColor;
+	public int   backgroundColor;
+	public int   darkColor;
+	public int   lightColor;
 
 	private List<IObserver> observers = new ArrayList<IObserver>();
 
@@ -28,12 +28,12 @@ public class Display extends PApplet implements IObservable{
 	}
 
 	public Display(){
-		this.canvasWidth = 290;
-		this.canvasHeight = 202;
-		this.canvasUnit = 10.0f;
-		this.drawFrameRate = 30.0f;
-		this.darkColor = 0;
-		this.lightColor = 255;	
+		this.canvasWidth     = 290;
+		this.canvasHeight    = 202;
+		this.canvasUnit      = 10.0f;
+		this.drawFrameRate   = 30.0f;
+		this.darkColor       = 0;
+		this.lightColor      = 255;	
 		this.backgroundColor = 204;
 	}
 
