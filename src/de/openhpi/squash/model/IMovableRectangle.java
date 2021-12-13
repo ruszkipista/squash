@@ -3,12 +3,8 @@ package de.openhpi.squash.model;
 public abstract class IMovableRectangle extends IPositionableRectangle {
     protected boolean modelChanged;
     private Speed distancePerSecond = new Speed();
-    private Point newTopLeft     = new Point();
-    private Point newTopRight    = new Point();
-    private Point newBottomRight = new Point();
-    private Point newBottomLeft  = new Point();
     // clockwise arrangement of new corners    
-    private Point[] newCorners = {newTopLeft,newTopRight,newBottomRight,newBottomLeft};
+    private Point[] newCorners = {new Point(),new Point(),new Point(),new Point()};
 
     public IMovableRectangle(float width,  float height,
                              float posX,   float posY,
@@ -19,24 +15,18 @@ public abstract class IMovableRectangle extends IPositionableRectangle {
     
     public void prepareMove(float lapsedTimeInSecond){
         // calculate new corners
-        this.newTopLeft.copyAndMove(super.topLeft, this.distancePerSecond, lapsedTimeInSecond);
-        calculateNewCorners();
-    }
-
-    public void calculateNewCorners(){
-        this.newTopRight.copyAndMove(this.newTopLeft, +super.width, 0);
-        this.newBottomRight.copyAndMove(this.newTopLeft, +super.width, +super.height);
-        this.newBottomLeft.copyAndMove(this.newTopLeft, 0, +super.height);
+        this.newCorners[0].copyAndMove(this.corners[0], this.distancePerSecond, lapsedTimeInSecond);
+        setCorners(newCorners);
     }
 
     public boolean finalizeMove() {
-        this.modelChanged = ! super.topLeft.equals(this.newTopLeft);
+        this.modelChanged = ! this.corners[0].equals(this.newCorners[0]);
         // overwrite corners with newCorners
         if (this.modelChanged){
-            super.topLeft.copy(this.newTopLeft);
-            super.topRight.copy(this.newTopRight);
-            super.bottomLeft.copy(this.newBottomLeft);
-            super.bottomRight.copy(this.newBottomRight);
+            this.corners[0].copy(this.newCorners[0]);
+            this.corners[1].copy(this.newCorners[1]);
+            this.corners[2].copy(this.newCorners[2]);
+            this.corners[3].copy(this.newCorners[3]);
         }
         return this.modelChanged;
     }
@@ -62,19 +52,18 @@ public abstract class IMovableRectangle extends IPositionableRectangle {
         int maxIntersectCountIndex = -1;
         int[] sideIntersectCounts = new int[other.corners.length];
 
-        this.distancePerSecond = this.getDistancePerSecond();
         if (this.distancePerSecond.x==0 && this.distancePerSecond.y==0){
             return;
         }
 
 		for (int i=0; i<other.corners.length;i++) {
 			sideIntersectCounts[i] = 0;
-			for (int j=0; j<super.corners.length;j++)
+			for (int j=0; j<this.corners.length;j++)
 				sideIntersectCounts[i] += 
-                    LineSegment.isIntersecting(other.corners[i], 
-                                               other.corners[(i+1) % other.corners.length],
-                                               this.corners[j], 
-                                               this.newCorners[j])
+                    Point.isIntersecting(other.corners[i], 
+                                         other.corners[(i+1) % other.corners.length],
+                                         this.corners[j], 
+                                         this.newCorners[j])
                     ? 1 : 0;
             if (maxIntersectCount < sideIntersectCounts[i]){
 				maxIntersectCount = sideIntersectCounts[i];
@@ -82,22 +71,16 @@ public abstract class IMovableRectangle extends IPositionableRectangle {
 			}
 		}
 		if (maxIntersectCount > 0){
+            this.newCorners[0].copy(this.corners[0]);
+            setCorners(newCorners);
             // top or bottom
 			if (maxIntersectCountIndex == 0 || maxIntersectCountIndex == 2) {
-				if (this.distancePerSecond.y>0)
-                    this.newTopLeft.y = other.corners[maxIntersectCountIndex].y-this.height-Point.EPSILON;
-				else if (this.distancePerSecond.y<0)
-                    this.newTopLeft.y = other.corners[maxIntersectCountIndex].y+Point.EPSILON;
-				this.distancePerSecond.negateY();
+                this.distancePerSecond.negateY();
 			} else {
                 // right or left
-				if (this.distancePerSecond.x>0)
-                    this.newTopLeft.x = other.corners[maxIntersectCountIndex].x-(this.width+Point.EPSILON);
-				else if (this.distancePerSecond.x<0)
-                    this.newTopLeft.x = other.corners[maxIntersectCountIndex].x+Point.EPSILON;
-				this.distancePerSecond.negateX();
+  				this.distancePerSecond.negateX();
 			}
-            calculateNewCorners();
+
 			this.justCollided = true;
             other.justCollided = true;
 		}

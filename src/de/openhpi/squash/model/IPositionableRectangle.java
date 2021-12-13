@@ -1,35 +1,34 @@
 package de.openhpi.squash.model;
 
-public abstract class IPositionableRectangle extends IRectangle {
+public abstract class IPositionableRectangle {
+    public float width;
+    public float height;
     public boolean justCollided;
-    protected Point topLeft     = new Point();
-    protected Point topRight    = new Point();
-    protected Point bottomRight = new Point();
-    protected Point bottomLeft  = new Point();
     // clockwise arrangement of corners    
-    protected Point[] corners = {topLeft,topRight,bottomRight,bottomLeft};
+    protected Point[] corners = {new Point(),new Point(),new Point(),new Point()};
 
     public IPositionableRectangle(float width, float height, float posX, float posY){
-        super(width, height);
-        this.topLeft.set(posX, posY);
-        this.setCorners();
+        this.width = width;
+        this.height = height;
+        setPosition(posX, posY);
+        setCorners(this.corners);
     }
     
-    protected void setCorners(){
-        topRight.copyAndMove(this.topLeft, +super.width, 0);
-        bottomLeft.copyAndMove(this.topLeft, 0, +super.height);
-        bottomRight.copyAndMove(this.topLeft, +super.width, +super.height);
+    protected void setCorners(Point[] corners){
+        corners[1].copyAndMove(corners[0], +this.width,            0);
+        corners[2].copyAndMove(corners[0], +this.width, +this.height);
+        corners[3].copyAndMove(corners[0],           0, +this.height);
     }
 
     public float getPositionX(){
-        return this.topLeft.x;
+        return this.corners[0].x;
     }
     public float getPositionY(){
-        return this.topLeft.y;
+        return this.corners[0].y;
     }
 
     public void setPosition(float x, float y){
-        this.topLeft.set(x,y);
+        this.corners[0].set(x,y);
     }
 
     public IPositionableRectangle getPositionableRectangle(){
