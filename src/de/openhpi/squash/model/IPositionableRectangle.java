@@ -8,12 +8,6 @@ public abstract class IPositionableRectangle extends IRectangle {
     protected Point bottomLeft  = new Point();
     // clockwise arrangement of corners    
     protected Point[] corners = {topLeft,topRight,bottomRight,bottomLeft};
-    private LineSegment top    = new LineSegment(topLeft,    topRight);
-    private LineSegment right  = new LineSegment(topRight,   bottomRight);
-    private LineSegment bottom = new LineSegment(bottomRight,bottomLeft);
-    private LineSegment left   = new LineSegment(bottomLeft, topLeft);
-    // clockwise arrangement of sides
-    protected LineSegment[] sides = {top,right,bottom,left};
 
     public IPositionableRectangle(float width, float height, float posX, float posY){
         super(width, height);

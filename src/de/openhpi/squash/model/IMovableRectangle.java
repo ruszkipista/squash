@@ -60,19 +60,23 @@ public abstract class IMovableRectangle extends IPositionableRectangle {
     public void checkCollison(IPositionableRectangle other) {
         int maxIntersectCount = 0;
         int maxIntersectCountIndex = -1;
-        int[] sideIntersectCounts = new int[other.sides.length];
+        int[] sideIntersectCounts = new int[other.corners.length];
 
         this.distancePerSecond = this.getDistancePerSecond();
         if (this.distancePerSecond.x==0 && this.distancePerSecond.y==0){
             return;
         }
 
-		for (int i=0; i<other.sides.length;i++) {
+		for (int i=0; i<other.corners.length;i++) {
 			sideIntersectCounts[i] = 0;
 			for (int j=0; j<super.corners.length;j++)
 				sideIntersectCounts[i] += 
-                    other.sides[i].isIntersectingWith(super.corners[j], this.newCorners[j]) ? 1 : 0;
-			if (maxIntersectCount < sideIntersectCounts[i]){
+                    LineSegment.isIntersecting(other.corners[i], 
+                                               other.corners[(i+1) % other.corners.length],
+                                               this.corners[j], 
+                                               this.newCorners[j])
+                    ? 1 : 0;
+            if (maxIntersectCount < sideIntersectCounts[i]){
 				maxIntersectCount = sideIntersectCounts[i];
 				maxIntersectCountIndex = i;
 			}
@@ -81,16 +85,16 @@ public abstract class IMovableRectangle extends IPositionableRectangle {
             // top or bottom
 			if (maxIntersectCountIndex == 0 || maxIntersectCountIndex == 2) {
 				if (this.distancePerSecond.y>0)
-                    this.newTopLeft.y = other.sides[maxIntersectCountIndex].pointA.y-this.height-Point.EPSILON;
+                    this.newTopLeft.y = other.corners[maxIntersectCountIndex].y-this.height-Point.EPSILON;
 				else if (this.distancePerSecond.y<0)
-                    this.newTopLeft.y = other.sides[maxIntersectCountIndex].pointA.y+Point.EPSILON;
+                    this.newTopLeft.y = other.corners[maxIntersectCountIndex].y+Point.EPSILON;
 				this.distancePerSecond.negateY();
 			} else {
                 // right or left
 				if (this.distancePerSecond.x>0)
-                    this.newTopLeft.x = other.sides[maxIntersectCountIndex].pointA.x-(this.width+Point.EPSILON);
+                    this.newTopLeft.x = other.corners[maxIntersectCountIndex].x-(this.width+Point.EPSILON);
 				else if (this.distancePerSecond.x<0)
-                    this.newTopLeft.x = other.sides[maxIntersectCountIndex].pointA.x+Point.EPSILON;
+                    this.newTopLeft.x = other.corners[maxIntersectCountIndex].x+Point.EPSILON;
 				this.distancePerSecond.negateX();
 			}
             calculateNewCorners();
