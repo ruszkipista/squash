@@ -1,7 +1,7 @@
 package de.openhpi.squash.model;
 
 public abstract class IPositionableRectangle extends IRectangle {
-    public boolean justGotHit;
+    public boolean justCollided;
     protected Point topLeft     = new Point();
     protected Point topRight    = new Point();
     protected Point bottomRight = new Point();

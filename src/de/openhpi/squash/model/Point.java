@@ -1,6 +1,8 @@
 package de.openhpi.squash.model;
 
 public class Point {
+    public static final float EPSILON = 1E-4f;
+
     public float x;
     public float y;
 

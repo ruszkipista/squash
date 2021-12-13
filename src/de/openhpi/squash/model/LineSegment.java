@@ -1,7 +1,6 @@
 package de.openhpi.squash.model;
 
 public class LineSegment {
-    private static final float EPSILON = 1E-5f;
     public Point pointA;
     public Point pointB;
 
@@ -63,8 +62,8 @@ public class LineSegment {
         // formula:  https://www.geeksforgeeks.org/orientation-3-ordered-points/
         float val = (q.y - p.y) * (r.x - q.x) - (q.x - p.x) * (r.y - q.y);
     
-        if (val > EPSILON) return 1;      // clock wise
-        else if (val < -EPSILON) return 2; // counterclock wise
+        if (val > Point.EPSILON) return 1;      // clock wise
+        else if (val < -Point.EPSILON) return 2; // counterclock wise
         else return 0;              // collinear
 
     }

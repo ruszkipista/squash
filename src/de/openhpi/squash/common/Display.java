@@ -4,9 +4,8 @@ import processing.core.PApplet;
 import java.util.List;
 import java.util.ArrayList;
 
-import de.openhpi.squash.controller.SquashController;
-
 public class Display extends PApplet implements IObservable{
+	private static Display instance;
 	public int   canvasWidth;
 	public int   canvasHeight;
 	public float canvasUnit;
@@ -17,15 +16,8 @@ public class Display extends PApplet implements IObservable{
 
 	private List<IObserver> observers = new ArrayList<IObserver>();
 
-	public static void main(String[] args) {
-        // this call instantiates the Display applet
-		PApplet.main(new String[]{Display.class.getName()});
-		
-		//To start the program in Fullscreen Mode, use this instead.
-        //PApplet.main(new String[]{"--present",TheApp.class.getName()});
-	}
-
 	public Display(){
+		instance = this;
 		this.canvasWidth     = 290;
 		this.canvasHeight    = 202;
 		this.canvasUnit      = 10.0f;
@@ -33,6 +25,10 @@ public class Display extends PApplet implements IObservable{
 		this.darkColor       = 0;
 		this.lightColor      = 255;	
 		this.backgroundColor = 204;
+	}
+
+	public static Display getInstance(){
+		return instance;
 	}
 
 	// PApplet
@@ -45,10 +41,6 @@ public class Display extends PApplet implements IObservable{
 	@Override
 	public void setup() {  // setup() runs once
 		super.frameRate(this.drawFrameRate);
-		// the instantiation must start from this thread
-		// to be able to draw the starting state
-		SquashController.setup(this);
-		this.notifyAllObservers("Display.SetUpReady");
 	}
 
 	// PApplet

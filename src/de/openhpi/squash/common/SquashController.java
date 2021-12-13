@@ -1,12 +1,12 @@
-package de.openhpi.squash.controller;
+package de.openhpi.squash.common;
 
+import processing.core.PApplet;
 import java.util.List;
-import java.util.Random;
 import java.util.ArrayList;
+import java.util.Random;
 
-import de.openhpi.squash.common.Display;
-import de.openhpi.squash.common.IObserver;
 import de.openhpi.squash.model.MovableRectangleModel;
+import de.openhpi.squash.model.Point;
 import de.openhpi.squash.model.BoardModel;
 import de.openhpi.squash.model.CounterModel;
 import de.openhpi.squash.model.IFrameable;
@@ -31,13 +31,19 @@ public class SquashController implements IObserver {
 
 	private List<IDrawable> shapeViews = new ArrayList<IDrawable>();
 	private List<IFrameable> shapeModels = new ArrayList<IFrameable>();
-	
-	public static void setup(Display display) {
-		new SquashController(display);
+
+	public static void main(String[] args) {
+        // this call instantiates the Display applet
+		PApplet.main(new String[]{Display.class.getName()});
+		
+		//To start the program in Fullscreen Mode, use this instead.
+        //PApplet.main(new String[]{"--present",TheApp.class.getName()});
+		
+		new SquashController(Display.getInstance());
 	}
 
-	// setup Views and Models
 	private SquashController(Display display){
+		// setup Views and Models
         this.frameTimeInSec = 1.0f / display.drawFrameRate;
 
 		this.display = display;
@@ -59,7 +65,7 @@ public class SquashController implements IObserver {
 		
 		this.ballModel = new MovableRectangleModel(display.canvasUnit,
 													display.canvasUnit,
-													0,0,
+													Point.EPSILON,Point.EPSILON,
 													display.canvasUnit*8, 
 													display.canvasUnit*6);
 		this.shapeModels.add(this.ballModel);
@@ -73,21 +79,13 @@ public class SquashController implements IObserver {
 														0,0);
 		this.shapeModels.add(this.obstacleModel);
 
-		this.obstacleView.set(this.obstacleModel.width, 
-					this.obstacleModel.height,
-					this.obstacleModel.getPositionX(),
-					this.obstacleModel.getPositionY(),
-					this.obstacleView.color);
+		this.copyModelAttributesToViews();
 	}
 
 	// process messages from Display
 	@Override
 	public void update(String message){
 		switch (message){
-			case "Display.SetUpReady":
-				this.copyModelAttributesToViews();
-				break;
-
 			case "Display.NextFrame":
 				this.calculateNextFrameInModels();
 				this.processCollisonsInModels();
@@ -128,9 +126,13 @@ public class SquashController implements IObserver {
 						  this.ballModel.getPositionX(),
 						  this.ballModel.getPositionY(),
 						  this.ballView.color);
-		if (this.obstacleModel.justGotHit){
-			this.obstacleView.color = random.nextInt(256);
-		}
+		int obstacleColor = (this.obstacleModel.justCollided) ? random.nextInt(256) : this.obstacleView.color;
+		this.obstacleModel.justCollided = false;
+		this.obstacleView.set(this.obstacleModel.width, 
+								this.obstacleModel.height,
+								this.obstacleModel.getPositionX(),
+								this.obstacleModel.getPositionY(),
+								obstacleColor);
 		this.counterView.set(this.counterModel.getCount(), 
 							 this.counterView.color);
 	}

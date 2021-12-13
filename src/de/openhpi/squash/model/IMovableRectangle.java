@@ -1,8 +1,6 @@
 package de.openhpi.squash.model;
 
 public abstract class IMovableRectangle extends IPositionableRectangle {
-    private boolean justBounced = true;
-    private boolean newJustBounced = false;
     protected boolean modelChanged;
     private Speed distancePerSecond = new Speed();
     private Point newTopLeft     = new Point();
@@ -20,7 +18,6 @@ public abstract class IMovableRectangle extends IPositionableRectangle {
     }
     
     public void prepareMove(float lapsedTimeInSecond){
-        super.justGotHit = false;
         // calculate new corners
         this.newTopLeft.copyAndMove(super.topLeft, this.distancePerSecond, lapsedTimeInSecond);
         calculateNewCorners();
@@ -34,8 +31,6 @@ public abstract class IMovableRectangle extends IPositionableRectangle {
 
     public boolean finalizeMove() {
         this.modelChanged = ! super.topLeft.equals(this.newTopLeft);
-        this.justBounced = this.newJustBounced;
-        this.newJustBounced = false;
         // overwrite corners with newCorners
         if (this.modelChanged){
             super.topLeft.copy(this.newTopLeft);
@@ -67,10 +62,6 @@ public abstract class IMovableRectangle extends IPositionableRectangle {
         int maxIntersectCountIndex = -1;
         int[] sideIntersectCounts = new int[other.sides.length];
 
-        if (this.justBounced){
-            this.newJustBounced = false;
-			return;
-		}
         this.distancePerSecond = this.getDistancePerSecond();
         if (this.distancePerSecond.x==0 && this.distancePerSecond.y==0){
             return;
@@ -90,21 +81,21 @@ public abstract class IMovableRectangle extends IPositionableRectangle {
             // top or bottom
 			if (maxIntersectCountIndex == 0 || maxIntersectCountIndex == 2) {
 				if (this.distancePerSecond.y>0)
-                    this.newTopLeft.y = other.sides[maxIntersectCountIndex].pointA.y-this.height;
+                    this.newTopLeft.y = other.sides[maxIntersectCountIndex].pointA.y-this.height-Point.EPSILON;
 				else if (this.distancePerSecond.y<0)
-                    this.newTopLeft.y = other.sides[maxIntersectCountIndex].pointA.y;
+                    this.newTopLeft.y = other.sides[maxIntersectCountIndex].pointA.y+Point.EPSILON;
 				this.distancePerSecond.negateY();
 			} else {
                 // right or left
 				if (this.distancePerSecond.x>0)
-                    this.newTopLeft.x = other.sides[maxIntersectCountIndex].pointA.x-this.width;
+                    this.newTopLeft.x = other.sides[maxIntersectCountIndex].pointA.x-(this.width+Point.EPSILON);
 				else if (this.distancePerSecond.x<0)
-                    this.newTopLeft.x = other.sides[maxIntersectCountIndex].pointA.x;
+                    this.newTopLeft.x = other.sides[maxIntersectCountIndex].pointA.x+Point.EPSILON;
 				this.distancePerSecond.negateX();
 			}
-			this.newJustBounced = true;
-            other.justGotHit = true;
             calculateNewCorners();
+			this.justCollided = true;
+            other.justCollided = true;
 		}
 	}
 
