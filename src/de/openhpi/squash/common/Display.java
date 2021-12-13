@@ -4,8 +4,6 @@ import processing.core.PApplet;
 import java.util.List;
 import java.util.ArrayList;
 
-import de.openhpi.squash.view.IDrawable;
-
 import de.openhpi.squash.controller.SquashController;
 
 public class Display extends PApplet implements IObservable{
@@ -63,12 +61,6 @@ public class Display extends PApplet implements IObservable{
 	@Override
 	public void mouseClicked() {
 		this.notifyAllObservers("Display.MouseClicked");
-	}
-
-	public void update(List<IDrawable> shapes) {
-		for (IDrawable shape : shapes)
-			shape.draw(this);
-		super.redraw();
 	}
 
 	// Observable
