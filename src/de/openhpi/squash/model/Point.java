@@ -44,11 +44,10 @@ public class Point {
     }
 
     /* https://www.geeksforgeeks.org/check-if-two-given-line-segments-intersect/
-        returns true if AB and CD line segments intersect
+       returns true if AB and CD line segments intersect
     */
     public static boolean isIntersecting(Point pointA, Point pointB, Point pointC, Point pointD) {
-        // Find the four orientations needed for general and
-        // special cases
+        // Find the four orientations needed for general and special cases
         int o1 = getOrientation(pointA, pointB, pointC);
         int o2 = getOrientation(pointA, pointB, pointD);
         int o3 = getOrientation(pointC, pointD, pointA);
@@ -76,17 +75,16 @@ public class Point {
 
     // To find orientation of ordered triplet (p, q, r).
     // The function returns following values
-    // 0 --> p, q and r are collinear
-    // 1 --> Clockwise
-    // 2 --> Counterclockwise
+    //  0 --> p, q and r are collinear
+    //  1 --> Clockwise
+    // -1 --> Counterclockwise
     private static int getOrientation(Point p, Point q, Point r) {
         // formula:  https://www.geeksforgeeks.org/orientation-3-ordered-points/
         float val = (q.y - p.y) * (r.x - q.x) - (q.x - p.x) * (r.y - q.y);
     
-        if (val > Point.EPSILON) return 1;      // clock wise
-        else if (val < -Point.EPSILON) return 2; // counterclock wise
-        else return 0;              // collinear
-
+        if (val > Point.EPSILON) return 1;        // clock wise
+        else if (val < -Point.EPSILON) return -1; // counterclock wise
+        return 0;                                // collinear
     }
 
     // Given three collinear points p, q, r, 

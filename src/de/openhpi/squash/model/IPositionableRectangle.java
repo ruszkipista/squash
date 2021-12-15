@@ -15,6 +15,7 @@ public abstract class IPositionableRectangle {
     }
     
     protected void setCorners(Point[] corners){
+        // relative to corner[0]
         corners[1].copyAndMove(corners[0], +this.width,            0);
         corners[2].copyAndMove(corners[0], +this.width, +this.height);
         corners[3].copyAndMove(corners[0],           0, +this.height);

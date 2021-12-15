@@ -46,13 +46,13 @@ public class Display extends PApplet implements IObservable{
 	// PApplet
 	@Override
 	public void draw() { // draw() calles 'drawFrameRate' times per second
-		this.notifyAllObservers("Display.NextFrame");
+		this.notifyAllObservers("Display.StartedNextFrame");
 	}
 
 	// PApplet
 	@Override
 	public void mouseClicked() {
-		this.notifyAllObservers("Display.MouseClicked");
+		this.notifyAllObservers("Display.ClickedMouse");
 	}
 
 	// Observable

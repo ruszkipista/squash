@@ -15,18 +15,19 @@ public abstract class IMovableRectangle extends IPositionableRectangle {
     
     public void prepareMove(float lapsedTimeInSecond){
         // calculate new corners
-        this.newCorners[0].copyAndMove(this.corners[0], this.distancePerSecond, lapsedTimeInSecond);
-        setCorners(newCorners);
+        for (int i=0; i<this.corners.length; i++)
+            this.newCorners[i].copyAndMove(this.corners[i], 
+                                           this.distancePerSecond, 
+                                           lapsedTimeInSecond);
     }
 
     public boolean finalizeMove() {
-        this.modelChanged = ! this.corners[0].equals(this.newCorners[0]);
-        // overwrite corners with newCorners
-        if (this.modelChanged){
-            this.corners[0].copy(this.newCorners[0]);
-            this.corners[1].copy(this.newCorners[1]);
-            this.corners[2].copy(this.newCorners[2]);
-            this.corners[3].copy(this.newCorners[3]);
+        this.modelChanged = false;
+        for (int i=0; i<this.corners.length; i++){
+            if (!this.corners[i].equals(this.newCorners[i]))
+                this.modelChanged = true;
+            // overwrite corner with newCorner
+            this.corners[i].copy(this.newCorners[i]);
         }
         return this.modelChanged;
     }
@@ -71,8 +72,6 @@ public abstract class IMovableRectangle extends IPositionableRectangle {
 			}
 		}
 		if (maxIntersectCount > 0){
-            this.newCorners[0].copy(this.corners[0]);
-            setCorners(newCorners);
             // top or bottom
 			if (maxIntersectCountIndex == 0 || maxIntersectCountIndex == 2) {
                 this.distancePerSecond.negateY();
@@ -80,7 +79,8 @@ public abstract class IMovableRectangle extends IPositionableRectangle {
                 // right or left
   				this.distancePerSecond.negateX();
 			}
-
+            for (int i=0; i<this.corners.length; i++)
+                this.newCorners[i].copy(this.corners[i]);            
 			this.justCollided = true;
             other.justCollided = true;
 		}

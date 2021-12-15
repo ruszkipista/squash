@@ -86,7 +86,7 @@ public class SquashController implements IObserver {
 	@Override
 	public void update(String message){
 		switch (message){
-			case "Display.NextFrame":
+			case "Display.StartedNextFrame":
 				this.calculateNextFrameInModels();
 				this.processCollisonsInModels();
 				if (this.finalizeNextFrameInModels()){
@@ -95,9 +95,9 @@ public class SquashController implements IObserver {
 				}
 				break;
 
-			case "Display.MouseClicked":
+			case "Display.ClickedMouse":
 				this.counterModel.increment(); 
-				// no need to trigger display.update(), because "Display.NextFrame" will do it in a bit
+				// the next frame will update the view on display
 				break;
 		}
 	}
